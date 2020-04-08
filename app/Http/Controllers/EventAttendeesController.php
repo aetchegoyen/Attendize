@@ -18,11 +18,6 @@ use App\Jobs\GenerateTicket;
 use App\Jobs\SendAttendeeTicket;
 use App\Models\Attendee;
 use App\Models\EventStats;
-<<<<<<< HEAD
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-=======
 use App\Models\Message;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -32,7 +27,6 @@ use Auth;
 use Config;
 use DB;
 use Excel;
->>>>>>> master
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -107,11 +101,7 @@ class EventAttendeesController extends MyBaseController
         }
 
         return view('ManageEvent.Modals.InviteAttendee', [
-<<<<<<< HEAD
-            'event' => $event,
-=======
             'event'   => $event,
->>>>>>> master
             'tickets' => $event->tickets()->pluck('title', 'id'),
         ]);
     }
@@ -122,15 +112,6 @@ class EventAttendeesController extends MyBaseController
      * @param int $eventId
      * @return \Illuminate\Http\JsonResponse
      */
-<<<<<<< HEAD
-    public function postInviteAttendee(
-        InviteAttendeeRequest $request,
-        InviteAttendeeService $inviteAttendeeService,
-        $eventId
-    ) {
-        if ($inviteAttendeeService->handle($request)) {
-            session()->flash('message', __('Attendee Successfully Invited'));
-=======
     public function postInviteAttendee(Request $request, $event_id)
     {
         $rules = [
@@ -143,16 +124,6 @@ class EventAttendeesController extends MyBaseController
             'ticket_id.exists'   => trans("Controllers.ticket_not_exists_error"),
             'ticket_id.required' => trans("Controllers.ticket_field_required_error"),
         ];
->>>>>>> master
-
-            return response()->json([
-<<<<<<< HEAD
-                'status' => self::RESPONSE_SUCCESS,
-=======
-                'status'   => 'error',
-                'messages' => $validator->messages()->toArray(),
-            ]);
-        }
 
         $ticket_id = $request->get('ticket_id');
         $event = Event::findOrFail($event_id);
@@ -239,13 +210,10 @@ class EventAttendeesController extends MyBaseController
 
             return response()->json([
                 'status'      => 'success',
->>>>>>> master
                 'redirectUrl' => route('showEventAttendees', [
                     'event_id' => $eventId,
                 ]),
             ]);
-<<<<<<< HEAD
-=======
 
         } catch (Exception $e) {
 
@@ -256,7 +224,6 @@ class EventAttendeesController extends MyBaseController
                 'status' => 'error',
                 'error'  => trans("Controllers.attendee_exception")
             ]);
->>>>>>> master
         }
 
         return response()->json([
@@ -278,11 +245,7 @@ class EventAttendeesController extends MyBaseController
         }
 
         return view('ManageEvent.Modals.ImportAttendee', [
-<<<<<<< HEAD
-            'event' => $event,
-=======
             'event'   => $event,
->>>>>>> master
             'tickets' => $event->tickets()->pluck('title', 'id'),
         ]);
     }
@@ -301,10 +264,6 @@ class EventAttendeesController extends MyBaseController
         $eventId
     )
     {
-<<<<<<< HEAD
-        if ($importAttendeeService->handle($request)) {
-            session()->flash('message', __('Attendees Successfully Invited'));
-=======
         $rules = [
             'ticket_id'      => 'required|exists:tickets,id,account_id,' . \Auth::user()->account_id,
             'attendees_list' => 'required|mimes:csv,txt|max:5000|',
@@ -316,7 +275,6 @@ class EventAttendeesController extends MyBaseController
 
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
->>>>>>> master
             return response()->json([
                 'status' => self::RESPONSE_SUCCESS,
                 'redirectUrl' => route('showEventAttendees', [
@@ -325,8 +283,6 @@ class EventAttendeesController extends MyBaseController
             ]);
         }
 
-<<<<<<< HEAD
-=======
         $ticket_id = $request->get('ticket_id');
         $event = Event::findOrFail($event_id);
         $ticket_price = 0;
@@ -419,7 +375,6 @@ class EventAttendeesController extends MyBaseController
 
         session()->flash('message', $num_added . ' Attendees Successfully Invited');
 
->>>>>>> master
         return response()->json([
             'status' => self::RESPONSE_ERROR,
             'message' => __('There was an error importing these attendees. Please try again')
@@ -478,11 +433,6 @@ class EventAttendeesController extends MyBaseController
             ]);
         }
 
-<<<<<<< HEAD
-        return response()->json([
-            'status' => self::RESPONSE_ERROR,
-            'message' => __('Message failed to send'),
-=======
         $attendee = Attendee::scope()->findOrFail($attendee_id);
 
         $data = [
@@ -514,7 +464,6 @@ class EventAttendeesController extends MyBaseController
         return response()->json([
             'status'  => 'success',
             'message' => trans("Controllers.message_successfully_sent"),
->>>>>>> master
         ]);
     }
 
@@ -525,13 +474,8 @@ class EventAttendeesController extends MyBaseController
     public function showMessageAttendees($eventId)
     {
         $data = [
-<<<<<<< HEAD
-            'event' => $this->eventRepository->find($eventId),
-            'tickets' => $this->eventRepository->find($eventId)->tickets()->pluck('title', 'id')->toArray(),
-=======
             'event'   => Event::scope()->find($event_id),
             'tickets' => Event::scope()->find($event_id)->tickets()->pluck('title', 'id')->toArray(),
->>>>>>> master
         ];
 
         return view('ManageEvent.Modals.MessageAttendees', $data);
@@ -558,15 +502,8 @@ class EventAttendeesController extends MyBaseController
     }
 
     /**
-<<<<<<< HEAD
-     * Download a ticket as PDF
-     *
-     * @param $eventId
-     * @param $attendeeId
-=======
      * @param $event_id
      * @param $attendee_id
->>>>>>> master
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function showDownloadTicketAsPDF($eventId, $attendeeId)
@@ -596,9 +533,6 @@ class EventAttendeesController extends MyBaseController
         $eventId,
         $exportAs = ExportAttendeesService::DEFAULT_EXPORT_FILE_TYPE)
     {
-<<<<<<< HEAD
-        $exportAttendeesService->handle($exportAttendeesRequest);
-=======
 
         Excel::create('attendees-as-of-' . date('d-m-Y-g.i.a'), function ($excel) use ($event_id) {
 
@@ -652,7 +586,6 @@ class EventAttendeesController extends MyBaseController
                 });
             });
         })->export($export_as);
->>>>>>> master
     }
 
     /**
@@ -669,13 +602,8 @@ class EventAttendeesController extends MyBaseController
 
         $data = [
             'attendee' => $attendee,
-<<<<<<< HEAD
-            'event' => $attendee->event,
-            'tickets' => $attendee->event->tickets->pluck('title', 'id'),
-=======
             'event'    => $attendee->event,
             'tickets'  => $attendee->event->tickets->pluck('title', 'id'),
->>>>>>> master
         ];
 
         return view('ManageEvent.Modals.EditAttendee', $data);
@@ -698,13 +626,8 @@ class EventAttendeesController extends MyBaseController
         ];
 
         $messages = [
-<<<<<<< HEAD
-            'ticket_id.exists' => 'The ticket you have selected does not exist',
-            'ticket_id.required' => 'The ticket field is required. ',
-=======
             'ticket_id.exists'   => trans("Controllers.ticket_not_exists_error"),
             'ticket_id.required' => trans("Controllers.ticket_field_required_error"),
->>>>>>> master
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -742,13 +665,8 @@ class EventAttendeesController extends MyBaseController
 
         $data = [
             'attendee' => $attendee,
-<<<<<<< HEAD
-            'event' => $attendee->event,
-            'tickets' => $attendee->event->tickets->pluck('title', 'id'),
-=======
             'event'    => $attendee->event,
             'tickets'  => $attendee->event->tickets->pluck('title', 'id'),
->>>>>>> master
         ];
 
         return view('ManageEvent.Modals.CancelAttendee', $data);
@@ -769,13 +687,8 @@ class EventAttendeesController extends MyBaseController
 
         if ($attendee->is_cancelled) {
             return response()->json([
-<<<<<<< HEAD
-                'status' => 'success',
-                'message' => 'Attendee Already Cancelled',
-=======
                 'status'  => 'success',
                 'message' => trans("Controllers.attendee_already_cancelled"),
->>>>>>> master
             ]);
         }
 
@@ -849,13 +762,8 @@ class EventAttendeesController extends MyBaseController
                 }
 
             } catch (\Exception $e) {
-<<<<<<< HEAD
-                Log::error($e);
-                $error_message = 'There has been a problem processing your refund. Please check your information and try again.';
-=======
                 \Log::error($e);
                 $error_message = trans("Controllers.refund_exception");
->>>>>>> master
 
             }
         }
@@ -909,13 +817,8 @@ class EventAttendeesController extends MyBaseController
         $this->dispatch(new SendAttendeeTicket($attendee));
 
         return response()->json([
-<<<<<<< HEAD
-            'status' => 'success',
-            'message' => 'Ticket Successfully Resent',
-=======
             'status'  => 'success',
             'message' => trans("Controllers.ticket_successfully_resent"),
->>>>>>> master
         ]);
     }
 

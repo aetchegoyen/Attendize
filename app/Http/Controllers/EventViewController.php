@@ -36,11 +36,7 @@ class EventViewController extends Controller
 
         $data = [
             'event' => $event,
-<<<<<<< HEAD
-            'tickets' => $event->tickets()->where('is_hidden', 0)->orderBy('sort_order', 'asc')->get(),
-=======
             'tickets' => $event->tickets()->orderBy('sort_order', 'asc')->get(),
->>>>>>> master
             'is_embedded' => 0,
             'codeCheckInRoute' => route('postCheckInAttendeeCode', ['event_id' => $event->id])
         ];
@@ -178,13 +174,8 @@ class EventViewController extends Controller
         });
 
         return response()->json([
-<<<<<<< HEAD
-            'status' => 'success',
-            'message' => 'Message Successfully Sent',
-=======
             'status'  => 'success',
             'message' => trans("Controllers.message_successfully_sent"),
->>>>>>> master
         ]);
     }
 

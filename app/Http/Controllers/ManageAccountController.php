@@ -31,18 +31,11 @@ class ManageAccountController extends MyBaseController
     public function showEditAccount(Request $request)
     {
         $data = [
-<<<<<<< HEAD
-            'account' => Account::find(Auth::user()->account_id),
-            'timezones' => Timezone::pluck('location', 'id'),
-            'currencies' => Currency::pluck('title', 'id'),
-            'payment_gateways' => PaymentGateway::pluck('provider_name', 'id'),
-=======
             'account'                  => Account::find(Auth::user()->account_id),
             'timezones'                => Timezone::pluck('location', 'id'),
             'currencies'               => Currency::pluck('title', 'id'),
             'payment_gateways'         => PaymentGateway::getAllWithDefaultSet(),
             'default_payment_gateway_id' => PaymentGateway::getDefaultPaymentGatewayId(),
->>>>>>> master
             'account_payment_gateways' => AccountPaymentGateway::scope()->get(),
             'version_info' => $this->getVersionInfo(),
         ];
@@ -144,15 +137,9 @@ class ManageAccountController extends MyBaseController
         $account->save();
 
         return response()->json([
-<<<<<<< HEAD
-            'status' => 'success',
-            'id' => $account->id,
-            'message' => 'Account Successfully Updated',
-=======
             'status'  => 'success',
             'id'      => $account->id,
             'message' => trans("Controllers.account_successfully_updated"),
->>>>>>> master
         ]);
     }
 
@@ -180,13 +167,6 @@ class ManageAccountController extends MyBaseController
                 break;
             case Dummy::GATEWAY_NAME :
                 break;
-<<<<<<< HEAD
-            case config('attendize.payment_gateway_migs') : //MIGS
-                $config = $request->get('migs');
-                break;
-=======
-
->>>>>>> master
         }
 
         PaymentGateway::query()->update(['default' => 0]);
@@ -209,15 +189,9 @@ class ManageAccountController extends MyBaseController
         $account->save();
 
         return response()->json([
-<<<<<<< HEAD
-            'status' => 'success',
-            'id' => $account_payment_gateway->id,
-            'message' => 'Payment Information Successfully Updated',
-=======
             'status'  => 'success',
             'id'      => $account_payment_gateway->id,
             'message' => trans("Controllers.payment_information_successfully_updated"),
->>>>>>> master
         ]);
     }
 
@@ -233,15 +207,9 @@ class ManageAccountController extends MyBaseController
         ];
 
         $messages = [
-<<<<<<< HEAD
-            'email.email' => 'Please enter a valid E-mail address.',
-            'email.required' => 'E-mail address is required.',
-            'email.unique' => 'E-mail already in use for this account.',
-=======
             'email.email'    => trans("Controllers.error.email.email"),
             'email.required' => trans("Controllers.error.email.required"),
             'email.unique'   => trans("Controllers.error.email.unique"),
->>>>>>> master
         ];
 
         $validation = Validator::make(Input::all(), $rules, $messages);
@@ -275,13 +243,8 @@ class ManageAccountController extends MyBaseController
         });
 
         return response()->json([
-<<<<<<< HEAD
-            'status' => 'success',
-            'message' => 'Success! <b>' . $user->email . '</b> has been sent further instructions.',
-=======
             'status'  => 'success',
             'message' => trans("Controllers.success_name_has_received_instruction", ["name"=>$user->email]),
->>>>>>> master
         ]);
     }
 }

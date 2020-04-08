@@ -24,13 +24,8 @@ class EventController extends MyBaseController
     public function showCreateEvent(Request $request)
     {
         $data = [
-<<<<<<< HEAD
-            'modal_id' => $request->get('modal_id'),
-            'organisers' => Organiser::scope()->pluck('name', 'id'),
-=======
             'modal_id'     => $request->get('modal_id'),
             'organisers'   => Organiser::scope()->pluck('name', 'id'),
->>>>>>> master
             'organiser_id' => $request->get('organiser_id') ? $request->get('organiser_id') : false,
         ];
 
@@ -140,13 +135,8 @@ class EventController extends MyBaseController
             $event->organiser_id = $request->get('organiser_id');
         } else { /* Somethings gone horribly wrong */
             return response()->json([
-<<<<<<< HEAD
-                'status' => 'error',
-                'messages' => 'There was an issue finding the organiser.',
-=======
                 'status'   => 'error',
                 'messages' => trans("Controllers.organiser_other_error"),
->>>>>>> master
             ]);
         }
 
@@ -182,13 +172,8 @@ class EventController extends MyBaseController
             Log::error($e);
 
             return response()->json([
-<<<<<<< HEAD
-                'status' => 'error',
-                'messages' => 'Whoops! There was a problem creating your event. Please try again.',
-=======
                 'status'   => 'error',
                 'messages' => trans("Controllers.event_create_exception"),
->>>>>>> master
             ]);
         }
 
@@ -335,15 +320,9 @@ class EventController extends MyBaseController
         }
 
         return response()->json([
-<<<<<<< HEAD
-            'status' => 'success',
-            'id' => $event->id,
-            'message' => 'Event Successfully Updated',
-=======
             'status'      => 'success',
             'id'          => $event->id,
             'message'     => trans("Controllers.event_successfully_updated"),
->>>>>>> master
             'redirectUrl' => '',
         ]);
     }

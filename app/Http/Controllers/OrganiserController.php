@@ -73,13 +73,8 @@ class OrganiserController extends MyBaseController
         session()->flash('message', trans("Controllers.successfully_created_organiser"));
 
         return response()->json([
-<<<<<<< HEAD
-            'status' => 'success',
-            'message' => 'Refreshing..',
-=======
             'status'      => 'success',
             'message'     => trans("Controllers.refreshing"),
->>>>>>> master
             'redirectUrl' => route('showOrganiserEvents', [
                 'organiser_id' => $organiser->id,
                 'first_run' => 1

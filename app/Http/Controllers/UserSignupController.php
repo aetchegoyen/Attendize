@@ -41,15 +41,9 @@ class UserSignupController extends Controller
     {
         $is_attendize = Utils::isAppSAAS();
         $this->validate($request, [
-<<<<<<< HEAD
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:5|confirmed',
-            'first_name' => 'required',
-=======
             'email'        => 'required|email|unique:users',
             'password'     => 'required|min:8|confirmed',
             'first_name'   => 'required',
->>>>>>> master
             'terms_agreed' => $is_attendize ? 'required' : '',
         ]);
 

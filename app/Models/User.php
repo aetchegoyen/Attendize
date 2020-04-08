@@ -155,21 +155,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->first_name . ' ' . $this->last_name;
     }
-<<<<<<< HEAD
-=======
-
-    /**
-     * Boot all of the bootable traits on the model.
-     */
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($user) {
-            $user->confirmation_code = str_random();
-            $user->api_token = str_random(60);
-        });
-    }
 
     /**
      * Send the password reset notification.
@@ -181,5 +166,4 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         $this->notify(new UserResetPassword($token));
     }
->>>>>>> master
 }

@@ -412,16 +412,6 @@ ICSTemplate;
     }
 
     /**
-     * Get the url of the event.
-     *
-     * @return string
-     */
-    public function getEventUrlAttribute()
-    {
-        return URL::to('/') . '/e/' . $this->id . '/' . Str::slug($this->title);
-    }
-
-    /**
      * @param integer $accessCodeId
      * @return bool
      */
