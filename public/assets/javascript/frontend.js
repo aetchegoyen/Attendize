@@ -3923,7 +3923,7 @@ function log() {
   $.payment.cards = cards = [
     {
       type: 'elo',
-      patterns: [4011, 4312, 4389, 4514, 4573, 4576, 5041, 5066, 5067, 509, 6277, 6362, 6363, 650, 6516, 6550],
+      patterns: [401178, 401179, 431274, 438935, 451416, 457393, 457631, 457632, 504175, 506699, 5067, 509, 627780, 636297, 636368, 650, 6516, 6550],
       format: defaultFormat,
       length: [16],
       cvcLength: [3],
@@ -4566,144 +4566,165 @@ function log() {
   };
 
 }).call(this);
-;$(function() {
+;function getAjaxFormConfig(form) {
+
+    var $form = form;
+    var $submitButton = $form.find('input[type=submit]');
+
+    toggleSubmitDisabled($submitButton);
+
+    var ajaxFormConf = {
+        delegation: true,
+        beforeSerialize: function (jqForm, options) {
+            window.doSubmit = true;
+            clearFormErrors(jqForm[0]);
+            toggleSubmitDisabled($submitButton);
+        },
+        beforeSubmit: function () {
+            $submitButton = $form.find('input[type=submit]');
+            toggleSubmitDisabled($submitButton);
+            return window.doSubmit;
+        },
+        error: function (data, statusText, xhr, $form) {
+            $submitButton = $form.find('input[type=submit]');
+
+            // Form validation error.
+            if (422 == data.status) {
+                processFormErrors($form, $.parseJSON(data.responseText));
+                return;
+            }
+
+            toggleSubmitDisabled($submitButton);
+            showMessage(lang("whoops"));
+        },
+        success: function (data, statusText, xhr, $form) {
+            var $submitButton = $form.find('input[type=submit]');
+
+            if (data.message) {
+                showMessage(data.message);
+            }
+
+            switch (data.status) {
+                case 'success':
+                    if (data.redirectUrl) {
+                        if (data.redirectData) {
+                            $.redirectPost(data.redirectUrl, data.redirectData);
+                        } else {
+                            if (data.isEmbedded) {
+                                window.parent.location.href = data.redirectUrl;
+                            } else {
+                                document.location.href = data.redirectUrl;
+                            }
+                        }
+                    }
+                    break;
+                case 'error':
+                    if (data.messages) {
+                        processFormErrors($form, data.messages);
+                        return;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+
+            toggleSubmitDisabled($submitButton);
+
+        },
+        dataType: 'json'
+    };
+
+    return ajaxFormConf;
+}
+
+$(function() {
+
     $('form.ajax').on('submit', function(e) {
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        var $form =
-                $(this),
-                $submitButton = $form.find('input[type=submit]'),
-                ajaxFormConf = {
-                    delegation: true,
-                    beforeSerialize: function(jqForm, options) {
-                        window.doSubmit = true;
-                        clearFormErrors(jqForm[0]);
-                        toggleSubmitDisabled($submitButton);
-                    },
-                    beforeSubmit: function() {
-                        $submitButton = $form.find('input[type=submit]');
-                        toggleSubmitDisabled($submitButton);
-                        return window.doSubmit;
-                    },
-                    error: function(data, statusText, xhr, $form) {
-                        $submitButton = $form.find('input[type=submit]');
+        var ajaxFormConf = getAjaxFormConfig($(this));
 
-                        // Form validation error.
-                        if (422 == data.status) {
-                            processFormErrors($form, $.parseJSON(data.responseText));
-                            return;
-                        }
+        $(this).ajaxSubmit(ajaxFormConf);
 
-                        toggleSubmitDisabled($submitButton);
-                        showMessage('Whoops!, it looks like the server returned an error.\n\
-                   Please try again, or contact the webmaster if the problem persists.');
-                    },
-                    success: function(data, statusText, xhr, $form) {
-                        var $submitButton = $form.find('input[type=submit]');
-
-                        if (data.message) {
-                            showMessage(data.message);
-                        }
-                        switch (data.status) {
-                            case 'success':
-
-                                if (data.redirectUrl) {
-                                    if(data.redirectData)  {
-                                        $.redirectPost(data.redirectUrl, data.redirectData);
-                                    } else {
-                                        document.location.href = data.redirectUrl;
-                                    }
-                                }
-                                break;
-
-                            case 'error':
-                                if (data.messages) {
-                                    processFormErrors($form, data.messages);
-                                    return;
-                                }
-                                break;
-
-                            default:
-                                break;
-
-
-                        }
-
-                        toggleSubmitDisabled($submitButton);
-
-
-                    },
-                    dataType: 'json'
-                };
-
-        toggleSubmitDisabled($submitButton);
-
-        if ($form.hasClass('payment-form') && !$('#pay_offline').is(":checked")) {
-            clearFormErrors($('.payment-form'));
-
-            Stripe.setPublishableKey($form.data('stripe-pub-key'));
-
-            var
-                    noErrors = true,
-                    $cardNumber = $('.card-number'),
-                    $cardName = $('.card-name'),
-                    $cvcNumber = $('.card-cvc'),
-                    $expiryMonth = $('.card-expiry-month'),
-                    $expiryYear = $('.card-expiry-year');
-
-
-            if (!Stripe.validateCardNumber($cardNumber.val())) {
-                showFormError($cardNumber, 'The credit card number appears to be invalid.');
-                noErrors = false;
-            }
-
-            if (!Stripe.validateCVC($cvcNumber.val())) {
-                showFormError($cvcNumber, 'The CVC number appears to be invalid.');
-                noErrors = false;
-            }
-
-            if (!Stripe.validateExpiry($expiryMonth.val(), $expiryYear.val())) {
-                showFormError($expiryMonth, 'The expiration date appears to be invalid.');
-                showFormError($expiryYear, '');
-                noErrors = false;
-            }
-
-            if (noErrors) {
-                Stripe.card.createToken({
-                    name: $cardName.val(),
-                    number: $cardNumber.val(),
-                    cvc: $cvcNumber.val(),
-                    exp_month: $expiryMonth.val(),
-                    exp_year: $expiryYear.val()
-                },
-                function(status, response) {
-
-                    if (response.error) {
-                        clearFormErrors($('.payment-form'));
-                        showFormError($('*[data-stripe=' + response.error.param + ']', $('.payment-form')), response.error.message);
-                        toggleSubmitDisabled($submitButton);
-                    } else {
-                        var token = response.id;
-                        $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-                        $form.ajaxSubmit(ajaxFormConf);
-                    }
-
-                });
-            } else {
-                showMessage('Please check your card details and try again.');
-                toggleSubmitDisabled($submitButton);
-            }
-
-        } else {
-            $form.ajaxSubmit(ajaxFormConf);
-        }
     });
+
+    //handles stripe payment form submit
+    $('#stripe-payment-form').on('submit', function (e) {
+
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        stripe.createToken(card).then(function (result) {
+            if (result.error) {
+                // Inform the user if there was an error.
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                // Send the token to your server.
+                stripeTokenHandler(result.token);
+            }
+        });
+
+    });
+
+    function stripeTokenHandler(token) {
+
+        var form = document.getElementById('stripe-payment-form');
+        var hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'stripeToken');
+        hiddenInput.setAttribute('value', token.id);
+        form.appendChild(hiddenInput);
+
+        var $ajaxFormConf = getAjaxFormConfig($('#stripe-payment-form'));
+        $('#stripe-payment-form').ajaxSubmit($ajaxFormConf);
+
+    }
+
+    $('#stripe-sca-payment-form').on('submit', function (e) {
+
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        stripe.createPaymentMethod(
+            'card',
+            cardElement
+        ).then(function (result) {
+            if (result.error) {
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+
+                stripePaymentMethodHandler(result.paymentMethod);
+            }
+        });
+    });
+
+
+    function stripePaymentMethodHandler(paymentMethod) {
+
+        var form = document.getElementById('stripe-sca-payment-form');
+        var hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'paymentMethod');
+        hiddenInput.setAttribute('value', paymentMethod.id);
+        form.appendChild(hiddenInput);
+
+        var $ajaxFormConf = getAjaxFormConfig($('#stripe-sca-payment-form'));
+        $('#stripe-sca-payment-form').ajaxSubmit($ajaxFormConf);
+
+    }
+
+    $('#pay_offline').change(function () {
+        $('.online_payment').toggle(!this.checked);
+        $('.offline_payment').toggle(this.checked);
+    }).change();
 
     $('a').smoothScroll({
         offset: -60
     });
-
 
     /* Scroll to top */
     $(window).scroll(function() {
@@ -4733,16 +4754,45 @@ function log() {
     $('.card-number').payment('formatCardNumber');
     $('.card-cvc').payment('formatCardCVC');
 
-    $('#pay_offline').change(function () {
-        $('.online_payment').toggle(!this.checked);
-        $('.offline_payment').toggle(this.checked);
+    // Apply access code here to unlock hidden tickets
+    $('#apply_access_code').click(function(e) {
+        var $clicked = $(this);
+        // Hide any previous errors
+        $clicked.closest('.form-group')
+            .removeClass('has-error');
 
-        // Disable CC form inputs to prevent Chrome trying to validate hidden fields
-        $('.online_payment input,  .online_payment select').attr('disabled', this.checked);
+        var url = $clicked.closest('.has-access-codes').data('url');
+        var data = {
+            'access_code': $('#unlock_code').val(),
+            '_token': $('input:hidden[name=_token]').val()
+        };
 
-    }).change();
+        $.post(url, data, function(response) {
+            if (response.status === 'error') {
+                // Show any access code errors
+                $clicked.closest('.form-group').addClass('has-error');
+                showMessage(response.message);
+                return;
+            }
 
+            $clicked.closest('.has-access-codes').before(response);
+            $('#unlock_code').val('');
+            $clicked.closest('.has-access-codes').remove();
+        });
+    });
 
+    $('#is_business').click(function(e) {
+        var $isBusiness = $(this);
+        var isChecked = $isBusiness.hasClass('checked');
+
+        if (isChecked == undefined || isChecked === false) {
+            $isBusiness.addClass('checked');
+            $('#business_details').removeClass('hidden').show();
+        } else {
+            $isBusiness.removeClass('checked');
+            $('#business_details').addClass('hidden').hide();
+        }
+    });
 });
 
 function processFormErrors($form, errors)
@@ -4789,7 +4839,7 @@ function toggleSubmitDisabled($submitButton) {
     $submitButton.data('original-text', $submitButton.val())
             .attr('disabled', true)
             .addClass('disabled')
-            .val('Just a second...');
+            .val(lang("processing"));
 }
 
 /**
@@ -4852,18 +4902,18 @@ function setCountdown($element, seconds) {
     function updateTimer() {
         msLeft = endTime - (+new Date);
         if (msLeft < 1000) {
-            alert("You have run out of time! You will have to restart the order process.");
+            alert(lang("time_run_out"));
             location.reload();
         } else {
 
             if (msLeft < 120000 && !twoMinWarningShown) {
-                showMessage("You only have 2 minutes left to complete this order!");
+                showMessage(lang("just_2_minutes"));
                 twoMinWarningShown = true;
             }
 
             time = new Date(msLeft);
             mins = time.getUTCMinutes();
-            $element.html('<b>' + mins + '</b> minutes and <b>' + twoDigits(time.getUTCSeconds()) + '</b> seconds');
+            $element.html('<b>' + mins + ':' + twoDigits(time.getUTCSeconds()) + '</b>');
             setTimeout(updateTimer, time.getUTCMilliseconds() + 500);
         }
     }

@@ -1,16 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <!--
-                  _   _                 _ _
-             /\  | | | |               | (_)
-            /  \ | |_| |_ ___ _ __   __| |_ _______   ___ ___  _ __ ___
-           / /\ \| __| __/ _ \ '_ \ / _` | |_  / _ \ / __/ _ \| '_ ` _ \
-          / ____ \ |_| ||  __/ | | | (_| | |/ /  __/| (_| (_) | | | | | |
-         /_/    \_\__|\__\___|_| |_|\__,_|_/___\___(_)___\___/|_| |_| |_|
-
-        -->
-        <title>{{{$organiser->name}}} - Attendize.com</title>
+        <title>{{{$organiser->name}}} - StreamingTickets</title>
 
 
         <meta charset="utf-8" />
@@ -40,8 +31,9 @@
         </div>
 
         <a href="#intro" style="display:none;" class="totop"><i class="ico-angle-up"></i>
-            <span style="font-size:11px;">TOP</span></a>
+            <span style="font-size:11px;">@lang("basic.TOP")</span></a>
 
+        @include("Shared.Partials.LangScript")
         {!!HTML::script('assets/javascript/frontend.js')!!}
 
         @include('Shared.Partials.GlobalFooterJS')

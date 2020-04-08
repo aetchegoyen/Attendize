@@ -1,8 +1,9 @@
 @if(session()->get('message'))
     <script>showMessage('{{\Session::get('message')}}');</script>
 @endif
+
+@if(config('attendize.google_analytics_id'))
 <script>
-    @if(env('GOOGLE_ANALYTICS_ID'))
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
@@ -15,8 +16,8 @@
             m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-        ga('create', '{{env('GOOGLE_ANALYTICS_ID')}}', 'auto');
+        ga('create', '{{config('attendize.google_analytics_id')}}', 'auto');
         ga('require', 'displayfeatures');
         ga('send', 'pageview');
-    @endif
 </script>
+@endif

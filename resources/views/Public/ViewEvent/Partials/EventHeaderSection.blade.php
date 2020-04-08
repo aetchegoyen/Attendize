@@ -1,59 +1,50 @@
 @if(!$event->is_live)
 <section id="goLiveBar">
     <div class="container">
-                @if(!$event->is_live)
-                This event is not visible to the public - <a style="background-color: green; border-color: green;" class="btn btn-success btn-xs" href="{{route('MakeEventLive' , ['event_id' => $event->id])}}" >Publish Event</a>
-                @endif
+        @if(!$event->is_live)
+
+        {{ @trans("ManageEvent.event_not_live") }}
+        <a href="{{ route('MakeEventLive' , ['event_id' => $event->id]) }}"
+           style="background-color: green; border-color: green;"
+        class="btn btn-success btn-xs">{{ @trans("ManageEvent.publish_it") }}</a>
+        @endif
     </div>
 </section>
 @endif
-<section id="organiserHead" class="container-fluid">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div onclick="window.location='{{$event->event_url}}#organiser'" class="event_organizer">
-                    <b>{{$event->organiser->name}}</b> Presents
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section id="intro" class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h1 property="name">{{$event->title}}</h1>
-            <div class="event_venue">
-                <span property="startDate" content="{{ $event->start_date->toIso8601String() }}">
-                    {{ $event->start_date->format('D d M H:i A') }}
-                </span>
-                -
-                <span property="endDate" content="{{ $event->end_date->toIso8601String() }}">
-                     @if($event->start_date->diffInHours($event->end_date) <= 12)
-                        {{ $event->end_date->format('H:i A') }}
-                     @else
-                        {{ $event->end_date->format('D d M H:i A') }}
-                     @endif
-                </span>
-                @
-                <span property="location" typeof="Place">
-                    <b property="name">{{$event->venue_name}}</b>
-                    <meta property="address" content="{{ urldecode($event->venue_name) }}">
-                </span>
-            </div>
+<!--Nav-->
+<nav id="header" class="bg-gray-800 w-full z-30 text-white relative">
 
-            <div class="event_buttons">
-                <div class="row">
-                    <div class="col-md-4 col-sm-4">
-                        <a class="btn btn-event-link btn-lg" href="{{{$event->event_url}}}#tickets">TICKETS</a>
-                    </div>
-                    <div class="col-md-4 col-sm-4">
-                        <a class="btn btn-event-link btn-lg" href="{{{$event->event_url}}}#details">DETAILS</a>
-                    </div>
-                    <div class="col-md-4 col-sm-4">
-                        <a class="btn btn-event-link btn-lg" href="{{{$event->event_url}}}#location">LOCATION</a>
-                    </div>
-                </div>
-            </div>
+    <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
+
+        <div class="flex items-center">
+            <a class="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
+                href="#">
+                STREAMING
+            </a>
+        </div>
+
+        <div class="block lg:hidden">
+            <button id="nav-toggle" class="flex items-center p-1 text-orange-800 hover:text-gray-900">
+                <svg class="fill-current h-6 w-6" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <title>Menu</title>
+                    <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-white lg:bg-transparent text-black p-4 lg:p-0 z-20"
+            id="nav-content">
+            <ul class="list-reset lg:flex justify-end flex-1 items-center">
+                <li class="mr-3">
+                    <a class="inline-block py-2 px-4 text-white font-bold no-underline" href="#">Active</a>
+                </li>
+                <li class="mr-3">
+                    <a class="inline-block text-gray-100 no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
+                        href="#">link</a>
+                </li>
+            </ul>
         </div>
     </div>
-</section>
+
+    <hr class="border-b border-gray-100 opacity-25 my-0 py-0" />
+</nav>

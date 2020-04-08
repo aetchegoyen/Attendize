@@ -31,6 +31,16 @@ class RemindersController extends Controller
     }
 
     /**
+     * Get the e-mail subject line to be used for the reset link email.
+     *
+     * @return string
+     */
+    protected function getEmailSubject()
+    {
+        return isset($this->subject) ? $this->subject : trans("Controllers.your_password_reset_link");
+    }
+
+    /**
      * Display the password reminder view.
      *
      * @return Response
@@ -49,9 +59,7 @@ class RemindersController extends Controller
     {
         $this->validate($request, ['email' => 'required']);
 
-        $response = $this->passwords->sendResetLink($request->only('email'), function ($m) {
-            $m->subject($this->getEmailSubject());
-        });
+        $response = $this->passwords->sendResetLink($request->only('email'));
 
         switch ($response) {
             case PasswordBroker::RESET_LINK_SENT:
@@ -60,16 +68,6 @@ class RemindersController extends Controller
             case PasswordBroker::INVALID_USER:
                 return redirect()->back()->withErrors(['email' => trans($response)]);
         }
-    }
-
-    /**
-     * Get the e-mail subject line to be used for the reset link email.
-     *
-     * @return string
-     */
-    protected function getEmailSubject()
-    {
-        return isset($this->subject) ? $this->subject : 'Your Password Reset Link';
     }
 
     /**
@@ -96,8 +94,8 @@ class RemindersController extends Controller
     public function postReset(Request $request)
     {
         $this->validate($request, [
-            'token' => 'required',
-            'email' => 'required',
+            'token'    => 'required',
+            'email'    => 'required',
             'password' => 'required|confirmed',
         ]);
 
@@ -115,7 +113,7 @@ class RemindersController extends Controller
 
         switch ($response) {
             case PasswordBroker::PASSWORD_RESET:
-                \Session::flash('message', 'Password Successfully Reset');
+                \Session::flash('message', trans("Controllers.password_successfully_reset"));
 
                 return redirect(route('login'));
 

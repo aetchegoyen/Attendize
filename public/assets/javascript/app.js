@@ -12,7 +12,8 @@ $(function () {
         var $div = $("<div>", {id: "DatePicker"});
         $("body").append($div);
         $div.DateTimePicker({
-            dateTimeFormat: Attendize.DateTimeFormat
+            dateTimeFormat: Attendize.DateTimeFormat,
+            dateSeparator: Attendize.DateSeparator
         });
 
     });
@@ -142,6 +143,7 @@ $(function () {
             $button = $(this);
 
         $('.modal').remove();
+        $('.modal-backdrop').remove();
         $('html').addClass('working');
 
         $.ajax({
@@ -172,7 +174,7 @@ $(function () {
             }
         }).done().fail(function (data) {
             $('html').removeClass('working');
-            showMessage('Whoops!, something has gone wrong.<br><br>' + data.status + ' ' + data.statusText);
+            showMessage(lang("whoops_and_error", {"code": data.status, "error": data.statusText}));
         });
 
         e.preventDefault();
@@ -224,6 +226,10 @@ $(function () {
 
                 if (typeof data.message !== 'undefined') {
                     showMessage(data.message);
+                }
+
+                if (typeof data.redirectUrl !== 'undefined') {
+                    window.location.href = data.redirectUrl;
                 }
 
                 switch (data.status) {
@@ -455,7 +461,7 @@ function removeQuestionOption(removeBtn)
     if (tbody.find('tr').length > 1) {
         removeBtn.parents('tr').remove();
     } else {
-        alert('You must have at least one option.');
+        alert(lang("at_least_one_option"));
     }
 }
 
@@ -504,7 +510,7 @@ function toggleSubmitDisabled($submitButton) {
 }
 
 /**
- * 
+ *
  * @returns {{}}
  */
 $.fn.serializeObject = function()

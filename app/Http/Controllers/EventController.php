@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
-use App\Models\EventImage;
-use App\Models\Organiser;
-use Auth;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Image;
 use Log;
+use Auth;
+use Image;
 use Validator;
+use App\Models\Event;
+use App\Models\Organiser;
+use App\Models\EventImage;
+use Illuminate\Http\Request;
+use Spatie\GoogleCalendar\Event as GCEvent;
+use Alaouy\Youtube\Facades\Youtube;
 
 class EventController extends MyBaseController
 {
@@ -23,8 +24,13 @@ class EventController extends MyBaseController
     public function showCreateEvent(Request $request)
     {
         $data = [
+<<<<<<< HEAD
             'modal_id' => $request->get('modal_id'),
             'organisers' => Organiser::scope()->pluck('name', 'id'),
+=======
+            'modal_id'     => $request->get('modal_id'),
+            'organisers'   => Organiser::scope()->pluck('name', 'id'),
+>>>>>>> master
             'organiser_id' => $request->get('organiser_id') ? $request->get('organiser_id') : false,
         ];
 
@@ -50,41 +56,49 @@ class EventController extends MyBaseController
 
         $event->title = $request->get('title');
         $event->description = strip_tags($request->get('description'));
-        $event->start_date = $request->get('start_date') ? Carbon::createFromFormat('d-m-Y H:i',
-            $request->get('start_date')) : null;
+        $event->start_date = $request->get('start_date');
+
+        try {
+            $event->streaming_url = Youtube::parseVidFromURL($event->streaming_url);
+        } catch (\Exception $e) {
+            $event->streaming_url = $event->streaming_url;
+        }
 
         /*
          * Venue location info (Usually auto-filled from google maps)
          */
 
-        $is_auto_address = (trim($request->get('place_id')) !== '');
+        $has_address = !empty(trim($request->get('name'))) && !empty(trim($request->get('location_venue_name')));
 
-        if ($is_auto_address) { /* Google auto filled */
-            $event->venue_name = $request->get('name');
-            $event->venue_name_full = $request->get('venue_name_full');
-            $event->location_lat = $request->get('lat');
-            $event->location_long = $request->get('lng');
-            $event->location_address = $request->get('formatted_address');
-            $event->location_country = $request->get('country');
-            $event->location_country_code = $request->get('country_short');
-            $event->location_state = $request->get('administrative_area_level_1');
-            $event->location_address_line_1 = $request->get('route');
-            $event->location_address_line_2 = $request->get('locality');
-            $event->location_post_code = $request->get('postal_code');
-            $event->location_street_number = $request->get('street_number');
-            $event->location_google_place_id = $request->get('place_id');
-            $event->location_is_manual = 0;
-        } else { /* Manually entered */
-            $event->venue_name = $request->get('location_venue_name');
-            $event->location_address_line_1 = $request->get('location_address_line_1');
-            $event->location_address_line_2 = $request->get('location_address_line_2');
-            $event->location_state = $request->get('location_state');
-            $event->location_post_code = $request->get('location_post_code');
-            $event->location_is_manual = 1;
+        if($has_address){
+            $is_auto_address = (trim($request->get('place_id')) !== '');
+
+            if ($is_auto_address) { /* Google auto filled */
+                $event->venue_name = $request->get('name');
+                $event->venue_name_full = $request->get('venue_name_full');
+                $event->location_lat = $request->get('lat');
+                $event->location_long = $request->get('lng');
+                $event->location_address = $request->get('formatted_address');
+                $event->location_country = $request->get('country');
+                $event->location_country_code = $request->get('country_short');
+                $event->location_state = $request->get('administrative_area_level_1');
+                $event->location_address_line_1 = $request->get('route');
+                $event->location_address_line_2 = $request->get('locality');
+                $event->location_post_code = $request->get('postal_code');
+                $event->location_street_number = $request->get('street_number');
+                $event->location_google_place_id = $request->get('place_id');
+                $event->location_is_manual = 0;
+            } else { /* Manually entered */
+                $event->venue_name = $request->get('location_venue_name');
+                $event->location_address_line_1 = $request->get('location_address_line_1');
+                $event->location_address_line_2 = $request->get('location_address_line_2');
+                $event->location_state = $request->get('location_state');
+                $event->location_post_code = $request->get('location_post_code');
+                $event->location_is_manual = 1;
+            }
         }
 
-        $event->end_date = $request->get('end_date') ? Carbon::createFromFormat('d-m-Y H:i',
-            $request->get('end_date')) : null;
+        $event->end_date = $request->get('end_date');
 
         $event->currency_id = Auth::user()->account->currency_id;
         //$event->timezone_id = Auth::user()->account->timezone_id;
@@ -103,7 +117,7 @@ class EventController extends MyBaseController
                 'organiser_email' => ['required', 'email'],
             ];
             $messages = [
-                'organiser_name.required' => 'You must give a name for the event organiser.',
+                'organiser_name.required' => trans("Controllers.no_organiser_name_error"),
             ];
 
             $validator = Validator::make($request->all(), $rules, $messages);
@@ -122,13 +136,17 @@ class EventController extends MyBaseController
             $organiser->twitter = $request->get('organiser_twitter');
             $organiser->save();
             $event->organiser_id = $organiser->id;
-
         } elseif ($request->get('organiser_id')) {
             $event->organiser_id = $request->get('organiser_id');
         } else { /* Somethings gone horribly wrong */
             return response()->json([
+<<<<<<< HEAD
                 'status' => 'error',
                 'messages' => 'There was an issue finding the organiser.',
+=======
+                'status'   => 'error',
+                'messages' => trans("Controllers.organiser_other_error"),
+>>>>>>> master
             ]);
         }
 
@@ -164,8 +182,13 @@ class EventController extends MyBaseController
             Log::error($e);
 
             return response()->json([
+<<<<<<< HEAD
                 'status' => 'error',
                 'messages' => 'Whoops! There was a problem creating your event. Please try again.',
+=======
+                'status'   => 'error',
+                'messages' => trans("Controllers.event_create_exception"),
+>>>>>>> master
             ]);
         }
 
@@ -179,7 +202,7 @@ class EventController extends MyBaseController
 
             $img = Image::make($file_full_path);
 
-            $img->resize(800, null, function ($constraint) {
+            $img->resize(1024, null, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
             });
@@ -224,10 +247,17 @@ class EventController extends MyBaseController
         }
 
         $event->is_live = $request->get('is_live');
+        $event->currency_id = $request->get('currency_id');
         $event->title = $request->get('title');
         $event->description = strip_tags($request->get('description'));
-        $event->start_date = $request->get('start_date') ? Carbon::createFromFormat('d-m-Y H:i',
-            $request->get('start_date')) : null;
+        $event->start_date = $request->get('start_date');
+        $event->google_tag_manager_code = $request->get('google_tag_manager_code');
+
+        try {
+            $event->streaming_url = $request->get('streaming_url') ? Youtube::parseVidFromURL($request->get('streaming_url')) : "";
+        } catch (\Exception $e) {
+            $event->streaming_url = $request->get('streaming_url');
+        }
 
         /*
          * If the google place ID is the same as before then don't update the venue
@@ -268,8 +298,8 @@ class EventController extends MyBaseController
             }
         }
 
-        $event->end_date = $request->get('end_date') ? Carbon::createFromFormat('d-m-Y H:i',
-            $request->get('end_date')) : null;
+        $event->end_date = $request->get('end_date');
+        $event->event_image_position = $request->get('event_image_position');
 
         if ($request->get('remove_current_image') == '1') {
             EventImage::where('event_id', '=', $event->id)->delete();
@@ -287,7 +317,7 @@ class EventController extends MyBaseController
 
             $img = Image::make($file_full_path);
 
-            $img->resize(800, null, function ($constraint) {
+            $img->resize(1024, null, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
             });
@@ -305,9 +335,15 @@ class EventController extends MyBaseController
         }
 
         return response()->json([
+<<<<<<< HEAD
             'status' => 'success',
             'id' => $event->id,
             'message' => 'Event Successfully Updated',
+=======
+            'status'      => 'success',
+            'id'          => $event->id,
+            'message'     => trans("Controllers.event_successfully_updated"),
+>>>>>>> master
             'redirectUrl' => '',
         ]);
     }
@@ -329,7 +365,7 @@ class EventController extends MyBaseController
 
             $img = Image::make($the_file);
 
-            $img->resize(1000, null, function ($constraint) {
+            $img->resize(1024, null, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
             });
@@ -342,8 +378,24 @@ class EventController extends MyBaseController
             }
 
             return response()->json([
-                'error' => 'There was a problem uploading your image.',
+                'error' => trans("Controllers.image_upload_error"),
             ]);
         }
+    }
+
+    /**
+     * Puplish event and redirect
+     * @param  Integer|false $event_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function makeEventLive($event_id = false) {
+        $event = Event::scope()->findOrFail($event_id);
+        $event->is_live = 1;
+        $event->save();
+        \Session::flash('message', trans('Event.go_live'));
+
+        return redirect()->action(
+            'EventDashboardController@showDashboard', ['event_id' => $event_id]
+        );
     }
 }

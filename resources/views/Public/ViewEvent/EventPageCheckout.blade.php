@@ -1,14 +1,21 @@
 @extends('Public.ViewEvent.Layouts.EventPage')
 
 @section('head')
-    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
 @stop
 
 @section('content')
     @include('Public.ViewEvent.Partials.EventHeaderSection')
 
-    @include('Public.ViewEvent.Partials.EventCreateOrderSection')
-    <script>var OrderExpires = {{strtotime($expires)}};</script>
-    @include('Public.ViewEvent.Partials.EventFooterSection')
-@stop
+    <!--Container-->
+    <div class="container md:px-0 mx-auto mt-10">
+        <div class="mx-0">
+            <div class="bg-gray-900 w-full text-gray-800 leading-normal rounded-t">
+                @include('Public.ViewEvent.Partials.EventCreateOrderSection')
+                <script>var OrderExpires = {{strtotime($expires)}};</script>
+            </div>
+        </div>
+    </div>
 
+@include('Public.ViewEvent.Partials.EventFooterSection')
+@stop

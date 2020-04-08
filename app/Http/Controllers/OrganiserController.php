@@ -40,6 +40,11 @@ class OrganiserController extends MyBaseController
     {
         $organiser = Organiser::createNew(false, false, true);
 
+        $chargeTax = $request->get('charge_tax');
+        if ($chargeTax == 1) {
+            $organiser->addExtraValidationRules();
+        }
+
         if (!$organiser->validate($request->all())) {
             return response()->json([
                 'status' => 'error',
@@ -54,17 +59,27 @@ class OrganiserController extends MyBaseController
         $organiser->twitter = $request->get('twitter');
         $organiser->confirmation_key = str_random(15);
 
+        $organiser->tax_name = $request->get('tax_name');
+        $organiser->tax_value = round($request->get('tax_value'),2);
+        $organiser->tax_id = $request->get('tax_id');
+        $organiser->charge_tax = ($chargeTax == 1) ? 1 : 0;
+
         if ($request->hasFile('organiser_logo')) {
             $organiser->setLogo($request->file('organiser_logo'));
         }
 
         $organiser->save();
 
-        session()->flash('message', 'Successfully Created Organiser.');
+        session()->flash('message', trans("Controllers.successfully_created_organiser"));
 
         return response()->json([
+<<<<<<< HEAD
             'status' => 'success',
             'message' => 'Refreshing..',
+=======
+            'status'      => 'success',
+            'message'     => trans("Controllers.refreshing"),
+>>>>>>> master
             'redirectUrl' => route('showOrganiserEvents', [
                 'organiser_id' => $organiser->id,
                 'first_run' => 1

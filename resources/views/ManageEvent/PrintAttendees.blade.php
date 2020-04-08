@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>
-            Attendees
+            @lang('Event.print_attendees_title')
         </title>
 
         <!--Style-->
@@ -19,18 +19,19 @@
     </head>
     <body style="background-color: #FFFFFF;" onload="window.print();">
         <div class="well" style="border:none; margin: 0;">
-            <b>{{$attendees->count()}}</b> Attendees for event: <b>{{{$event->title}}}</b> ({{$event->start_date->toDayDateTimeString()}})<br>
+            {{ @trans("Event.n_attendees_for_event", ["num"=>$attendees->count(), "name"=>$event->title, "date"=>$event->start_date->format(config('attendize.default_datetime_format'))]) }}
+            <br>
         </div>
 
         <table class="table table-hover table-striped">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Ticket</th>
-                    <th>Order Ref.</th>
-                    <th>Purchase Date</th>
-                    <th>Arrived</th>
+                    <th>@lang("Attendee.name")</th>
+                    <th>@lang("Attendee.email")</th>
+                    <th>@lang("Order.ticket")</th>
+                    <th>@lang("Order.order_ref")</th>
+                    <th>@lang("Order.purchase_date")</th>
+                    <th>@lang("Order.arrived")</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,7 +41,7 @@
                     <td>{{{$attendee->email}}}</td>
                     <td>{{{$attendee->ticket->title}}}</td>
                     <td>{{{$attendee->order->order_reference}}}</td>
-                    <td>{{$attendee->created_at->format('d/m/Y H:i')}}</td>
+                    <td>{{$attendee->created_at->format(config("attendize.default_datetime_format"))}}</td>
                     <td><input type="checkbox" style="border: 1px solid #000; height: 15px; width: 15px;" /></td>
                 </tr>
                 @endforeach

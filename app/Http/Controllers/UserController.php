@@ -32,31 +32,31 @@ class UserController extends Controller
     public function postEditUser(Request $request)
     {
         $rules = [
-            'email' => [
+            'email'        => [
                 'required',
                 'email',
                 'unique:users,email,' . Auth::user()->id . ',id,account_id,' . Auth::user()->account_id
             ],
-            'new_password' => ['min:5', 'confirmed', 'required_with:password'],
-            'password' => 'passcheck',
-            'first_name' => ['required'],
-            'last_name' => ['required'],
+            'password'     => 'passcheck',
+            'new_password' => ['min:8', 'confirmed', 'required_with:password'],
+            'first_name'   => ['required'],
+            'last_name'    => ['required'],
         ];
 
         $messages = [
-            'email.email' => 'Please enter a valid E-mail address.',
-            'email.required' => 'E-mail address is required.',
-            'password.passcheck' => 'This password is incorrect.',
-            'email.unique' => 'This E-mail is already in use.',
-            'first_name.required' => 'Please enter your first name.',
-            'last_name.required' => 'Please enter your last name.',
+            'email.email'         => trans("Controllers.error.email.email"),
+            'email.required'      => trans("Controllers.error.email.required"),
+            'password.passcheck'  => trans("Controllers.error.password.passcheck"),
+            'email.unique'        => trans("Controllers.error.email.unique"),
+            'first_name.required' => trans("Controllers.error.first_name.required"),
+            'last_name.required'  => trans("Controllers.error.last_name.required"),
         ];
 
         $validation = Validator::make($request->all(), $rules, $messages);
 
         if ($validation->fails()) {
             return response()->json([
-                'status' => 'error',
+                'status'   => 'error',
                 'messages' => $validation->messages()->toArray(),
             ]);
         }
@@ -74,8 +74,8 @@ class UserController extends Controller
         $user->save();
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Successfully Saved Details',
+            'status'  => 'success',
+            'message' => trans("Controllers.successfully_saved_details"),
         ]);
     }
 }

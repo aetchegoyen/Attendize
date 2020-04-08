@@ -89,3 +89,33 @@
 .no-border {
     border: none;
 }
+.fullscreen-video{
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    filter:blur(5px);
+
+    video{
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        min-width: 100%;
+        min-height: 100%;
+        z-index: 0;
+    }
+
+    &::after{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        content: " ";
+        background-color: darken(@maincontent-base-color, 50%);
+        z-index: 1;
+        opacity: .6;
+    }
+}

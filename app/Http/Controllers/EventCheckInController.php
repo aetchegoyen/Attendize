@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendee;
-use App\Models\Event;
-use Carbon\Carbon;
 use DB;
-use Illuminate\Http\Request;
 use JavaScript;
+use Carbon\Carbon;
+use App\Models\Event;
+use App\Models\Attendee;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 class EventCheckInController extends MyBaseController
 {
@@ -19,17 +20,16 @@ class EventCheckInController extends MyBaseController
      */
     public function showCheckIn($event_id)
     {
-
         $event = Event::scope()->findOrFail($event_id);
 
         $data = [
-            'event' => $event,
+            'event'     => $event,
             'attendees' => $event->attendees
         ];
 
         JavaScript::put([
             'qrcodeCheckInRoute' => route('postQRCodeCheckInAttendee', ['event_id' => $event->id]),
-            'checkInRoute' => route('postCheckInAttendee', ['event_id' => $event->id]),
+            'checkInRoute'       => route('postCheckInAttendee', ['event_id' => $event->id]),
             'checkInSearchRoute' => route('postCheckInSearch', ['event_id' => $event->id]),
         ]);
 
@@ -59,8 +59,11 @@ class EventCheckInController extends MyBaseController
                 $query->where('attendees.event_id', '=', $event_id);
             })->where(function ($query) use ($searchQuery) {
                 $query->orWhere('attendees.first_name', 'like', $searchQuery . '%')
-                    ->orWhere(DB::raw("CONCAT_WS(' ', attendees.first_name, attendees.last_name)"), 'like',
-                        $searchQuery . '%')
+                    ->orWhere(
+                        DB::raw("CONCAT_WS(' ', attendees.first_name, attendees.last_name)"),
+                        'like',
+                        $searchQuery . '%'
+                    )
                     //->orWhere('attendees.email', 'like', $searchQuery . '%')
                     ->orWhere('orders.order_reference', 'like', $searchQuery . '%')
                     ->orWhere('attendees.last_name', 'like', $searchQuery . '%');
@@ -101,10 +104,10 @@ class EventCheckInController extends MyBaseController
          */
         if ((($checking == 'in') && ($attendee->has_arrived == 1)) || (($checking == 'out') && ($attendee->has_arrived == 0))) {
             return response()->json([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'Attendee Already Checked ' . (($checking == 'in') ? 'In (at ' . $attendee->arrival_time->format('H:i A, F j') . ')' : 'Out') . '!',
                 'checked' => $checking,
-                'id' => $attendee->id,
+                'id'      => $attendee->id,
             ]);
         }
 
@@ -113,10 +116,10 @@ class EventCheckInController extends MyBaseController
         $attendee->save();
 
         return response()->json([
-            'status' => 'success',
+            'status'  => 'success',
             'checked' => $checking,
-            'message' => 'Attendee Successfully Checked ' . (($checking == 'in') ? 'In' : 'Out'),
-            'id' => $attendee->id,
+            'message' =>  (($checking == 'in') ? trans("Controllers.attendee_successfully_checked_in") : trans("Controllers.attendee_successfully_checked_out")),
+            'id'      => $attendee->id,
         ]);
     }
 
@@ -152,64 +155,98 @@ class EventCheckInController extends MyBaseController
 
         if (is_null($attendee)) {
             return response()->json([
-                'status' => 'error',
-                'message' => "Invalid Ticket! Please try again."
+                'status'  => 'error',
+                'message' => trans("Controllers.invalid_ticket_error")
             ]);
         }
 
         $relatedAttendesCount = Attendee::where('id', '!=', $attendee->id)
             ->where([
-                'order_id' => $attendee->order_id,
+                'order_id'    => $attendee->order_id,
                 'has_arrived' => false
             ])->count();
 
-        if ($relatedAttendesCount >= 1) {
-            $confirmOrderTicketsRoute = route('confirmCheckInOrderTickets', [$event->id, $attendee->order_id]);
-
-            /*
-             * @todo Incorporate this feature into the new design
-             */
-            //$appendedText = '<br><br><form class="ajax" action="' . $confirmOrderTicketsRoute . '" method="POST">' . csrf_field() . '<button class="btn btn-primary btn-sm" type="submit"><i class="ico-ticket"></i> Check in all tickets associated to this order</button></form>';
-        } else {
-            $appendedText = '';
-        }
-
         if ($attendee->has_arrived) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Attendee already checked in at ' . $attendee->arrival_time->format('H:i A, F j') . $appendedText
+                'status'  => 'error',
+                'message' => trans("Controllers.attendee_already_checked_in", ["time"=> $attendee->arrival_time->format(config("attendize.default_datetime_format"))])
             ]);
         }
 
         Attendee::find($attendee->id)->update(['has_arrived' => true, 'arrival_time' => Carbon::now()]);
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Success !<br>Name: ' . $attendee->first_name . ' ' . $attendee->last_name . '<br>Reference: ' . $attendee->reference . '<br>Ticket: ' . $attendee->ticket . '.' . $appendedText
+            'status'  => 'success',
+            'name' => $attendee->first_name." ".$attendee->last_name,
+            'reference' => $attendee->reference,
+            'ticket' => $attendee->ticket
         ]);
     }
 
     /**
-     * Confirm tickets of same order.
+     * Check in an attendee
      *
      * @param $event_id
-     * @param $order_id
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function confirmOrderTicketsQr($event_id, $order_id)
+    public function postCheckInAttendeeCode($event_id, Request $request)
     {
-        $updateRowsCount = Attendee::scope()->where([
-            'event_id' => $event_id,
-            'order_id' => $order_id,
-            'has_arrived' => 0,
-        ])->update([
-            'has_arrived' => 1,
-            'arrival_time' => Carbon::now(),
-        ]);
+        $event = Event::scope()->findOrFail($event_id);
+
+        $code = $request->get('access_code');
+        $email = $request->get('email');
+        $attendee = Attendee::scope()->withoutCancelled()
+            ->join('tickets', 'tickets.id', '=', 'attendees.ticket_id')
+            ->where(function ($query) use ($event, $code, $email) {
+                $query->where('attendees.event_id', $event->id)
+                    ->where('attendees.private_reference_number', $code)
+                    ->where('attendees.email', $email);
+            })->select([
+                'attendees.id',
+                'attendees.order_id',
+                'attendees.first_name',
+                'attendees.last_name',
+                'attendees.email',
+                'attendees.reference_index',
+                'attendees.arrival_time',
+                'attendees.has_arrived',
+                'tickets.title as ticket',
+            ])->first();
+
+        if (is_null($attendee)) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => trans("Controllers.invalid_ticket_error")
+            ]);
+        }
+
+        $relatedAttendesCount = Attendee::where('id', '!=', $attendee->id)
+            ->where([
+                'order_id'    => $attendee->order_id,
+                'has_arrived' => false
+            ])->count();
+
+        if ($attendee->has_arrived && false) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => trans("Controllers.attendee_already_checked_in", ["time"=> $attendee->arrival_time->format(config("attendize.default_datetime_format"))])
+            ]);
+        }
+
+        Attendee::find($attendee->id)->update(['has_arrived' => true, 'arrival_time' => Carbon::now()]);
 
         return response()->json([
-            'message' => $updateRowsCount . ' Attendee(s) Checked in.'
+            'status'  => 'success',
+            'name' => $attendee->first_name." ".$attendee->last_name,
+            'reference' => $attendee->reference,
+            'ticket' => $attendee->ticket,
+            'dest' => route('showLiveEventPage', [ 
+                'event_id' => $event_id, 
+                'reference' => base64_encode($code), 
+                'event_slug' => Str::slug($event->title) 
+                ]
+            )
         ]);
     }
-
 }

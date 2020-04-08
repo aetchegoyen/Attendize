@@ -2,21 +2,41 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Http\UploadedFile;
-use Image;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Str;
+use Image;
 
-class Organiser extends MyBaseModel
+class Organiser extends MyBaseModel implements AuthenticatableContract
 {
+    use Authenticatable;
     /**
      * The validation rules for the model.
      *
      * @var array $rules
      */
     protected $rules = [
-        'name' => ['required'],
-        'email' => ['required', 'email'],
+        'name'           => ['required'],
+        'email'          => ['required', 'email'],
         'organiser_logo' => ['mimes:jpeg,jpg,png', 'max:10000'],
+    ];
+
+    protected $extra_rules = [
+        'tax_name'        => ['required','max:15'],
+        'tax_value'       => ['required','numeric'],
+        'tax_id'          => ['required','max:100'],
+    ];
+
+    /**
+     * The validation rules for the model.
+     *
+     * @var array $attributes
+     */
+    protected $attributes = [
+        'tax_name'        => 'Tax Name',
+        'tax_value'       => 'Tax Rate',
+        'tax_id'          => 'Tax ID',
     ];
 
     /**
@@ -25,9 +45,9 @@ class Organiser extends MyBaseModel
      * @var array $messages
      */
     protected $messages = [
-        'name.required' => 'You must at least give a name for the event organiser.',
-        'organiser_logo.max' => 'Please upload an image smaller than 10Mb',
-        'organiser_logo.size' => 'Please upload an image smaller than 10Mb',
+        'name.required'        => 'You must at least give a name for the event organiser.',
+        'organiser_logo.max'   => 'Please upload an image smaller than 10Mb',
+        'organiser_logo.size'  => 'Please upload an image smaller than 10Mb',
         'organiser_logo.mimes' => 'Please select a valid image type (jpeg, jpg, png)',
     ];
 
@@ -93,7 +113,7 @@ class Organiser extends MyBaseModel
     public function getOrganiserUrlAttribute()
     {
         return route('showOrganiserHome', [
-            'organiser_id' => $this->id,
+            'organiser_id'   => $this->id,
             'organiser_slug' => Str::slug($this->oraganiser_name),
         ]);
     }
@@ -123,20 +143,20 @@ class Organiser extends MyBaseModel
      */
     public function setLogo(UploadedFile $file)
     {
-        $filename = str_slug($this->name) . '-logo-' . $this->id . '.' . strtolower($file->getClientOriginalExtension());
+        $filename = str_slug($this->name).'-logo-'.$this->id.'.'.strtolower($file->getClientOriginalExtension());
 
         // Image Directory
         $imageDirectory = public_path() . '/' . config('attendize.organiser_images_path');
 
         // Paths
-        $relativePath = config('attendize.organiser_images_path') . '/' . $filename;
+        $relativePath = config('attendize.organiser_images_path').'/'.$filename;
         $absolutePath = public_path($relativePath);
 
         $file->move($imageDirectory, $filename);
 
         $img = Image::make($absolutePath);
 
-        $img->resize(250, 250, function ($constraint) {
+        $img->resize(1024, null, function ($constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
         });
@@ -147,4 +167,12 @@ class Organiser extends MyBaseModel
             $this->logo_path = $relativePath;
         }
     }
+
+    /**
+     * Adds extra validator rules to the organiser object depending on whether tax is required or not
+     */
+    public function addExtraValidationRules() {
+        $this->rules = $this->rules + $this->extra_rules;
+    }
 }
+

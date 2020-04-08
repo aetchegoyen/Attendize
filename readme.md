@@ -1,25 +1,28 @@
 ## This branch is a work in progress and should not be used in production. Many features and broken, incomplete or missing.
 
 <p align="center">
-  <img src="https://www.attendize.com/img/logo-dark.png" alt="Attendize"/>
+  <img src="http://attendize.website/assets/images/logo-dark.png" alt="Attendize"/>
+  <img style='border: 1px solid #444;' src="https://www.attendize.com/images/screenshots/screen1.PNG" alt="Attendize"/>
 </p>
-# Attendize 
-### Open-source ticket selling and event management platform
 
-https://www.attendize.com
+<h1>Attendize</h1>
+<p>
+Open-source ticket selling and event management platform
+</p>
 
-> PLEASE NOTE: Attendize is in the early stages of development and therefore is likely to contain bugs and unfinished features. Be wary about using Attendize in a production environment.
 
-> Please ask any questions/report bugs in our new support forum: https://attendize.com/forum/
+> Please report bugs here: https://github.com/Attendize/Attendize/issues. Detailed bug reports are more likely to be looked at. Simple creating an issue and saying "it doesn't work" is not useful. Providing some steps to reproduce your problem as well as details about your operating system, PHP version etc can help. <br />
 
-######Demo Event Page: http://attendize.website/e/1/acmes-amazing-demo-event
+> Take a look http://www.attendize.com/troubleshooting.html and follow the http://www.attendize.com/getting_started.html guide to make sure you have configured attendize correctly.  
 
+Documentation Website: http://www.attendize.com<br />
+Demo Event Page: http://attendize.website/e/799/attendize-test-event-w-special-guest-attendize<br />
+Demo Back-end Demo: http://attendize.website/signup<br />
 
 *Attendize* is an open-source event ticketing and event management application built using the Laravel PHP framework. Attendize was created to offer event organisers a simple solution to managing general admission events, without paying extortionate service fees.
 
-The current version (v1.X.X) will not receive any significant feature improvements, only security fixes. All effort will go into developing v2.0.0.
-
-##Current Features (v1.X.X)
+### Current Features (v1.X.X)
+---
  - Beautiful mobile friendly event pages
  - Easy attendee management - Refunds, Messaging etc.
  - Data export - attendees list to XLS, CSV etc.
@@ -44,55 +47,42 @@ The current version (v1.X.X) will not receive any significant feature improvemen
  - Public event listings page for organisers
  - Ability to ask custom questions during checkout
  - Browser based QR code scanner for door management
-    
-## Upcoming changes in v2.0.0
- - Theme support
- - Plugin Support
- - Localisation 
- - Increased test coverage
- - Laravel 5.4
- - IOS/Android check-in / door management apps
- - Coupon/discount code support
- - Support for more payment providers
- - WordPress Plug-in 
 
+### Contribution
+---
+Feel free to fork and contribute. If you are unsure about adding a feature create a Github issue to ask for Feedback. Read the [contribution guidelines](http://www.attendize.com/contributions.html)
 
-## Official Documentation
+### Submitting an issue
+If you are creating an issue/bug report for Attendize please let us know the following.
+1. The version of Attendize you are using. e.g. master branch or release tag.
+2. Are you running Attendize in Docker or using a Virtual Machine.
+3. What version or Operating System are you using. e.g. Ubuntu 14.04
+4. The version of PHP you are using. e.g PHP 7.1
+5. Are you using Attendize with Nginx or Apache.
+6. Steps to reproduce the bug.
 
-Limited Documentation available at https://www.attendize.com/documentation.php. Github will be updated with more comprehensive documentation soon.
+### Installation
+---
+To get developing straight away use the [Pre-configured Docker Environment](http://www.attendize.com/getting_started.html#running-attendize-in-docker-for-development)<br />
+To do a manual installation use the [Manual Installation Steps](http://www.attendize.com/getting_started.html#manual-installation)
 
+### Troubleshooting
+---
+If you are having problems please read the [troubleshooting guide](http://www.attendize.com/troubleshooting.html) 
 
-## Contribution
+License
+---
 
-Feel free to fork and contribute. I could use the help!
+Attendize is open-sourced software licensed under the Attribution Assurance License. See [http://www.attendize.com/license.html](http://www.attendize.com/license.html) for further details. We also have white-label licence options available.
 
-## Docker dev environment
-
-To run a docker dev entionment do the following:
-
-```
-git clone https://github.com/Attendize/Attendize
-cd Attendize
-cp .env.example .env
-docker-compose build
-docker run --rm -v $(pwd):/app composer/composer install
-docker-compose up
-docker-compose run php php artisan attendize:install
-chmod a+w -R storage
-chmod a+w -R public/user_content
-```
-
-Attendize will be available at `http://localhost:8080` and maildev at `http://localhost:1080`
-
-## License
-
-Attendize is open-sourced software licensed under the Attribution Assurance License. See [https://www.attendize.com/licence.php](https://www.attendize.com/licence.php) for further details. We also have white-label licence options available.
-
-## Contributors 
-
+Contributors 
+---
+* Jeremy Quinton ([Github](https://github.com/jeremyquinton))
+* Sam Bell ([Github](https://github.com/samdb))
+* Sebastian Schmidt ([Github](https://github.com/publicarray))
 * Brett B ([Github](https://github.com/bretto36))
 * G0dLik3 ([Github](https://github.com/G0dLik3))
-* Honoré Hounwanou ([Github](http://github.com/mercuryseries)) <mercuryseries@gmail.com>
+* Honoré Hounwanou ([Github](http://github.com/mercuryseries))
 * James Campbell ([Github](https://github.com/jncampbell))
 * JapSeyz ([Github](https://github.com/JapSeyz))
 * Mark Walet ([Github](https://github.com/markwalet))

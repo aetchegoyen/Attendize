@@ -41,9 +41,15 @@ class UserSignupController extends Controller
     {
         $is_attendize = Utils::isAppSAAS();
         $this->validate($request, [
+<<<<<<< HEAD
             'email' => 'required|email|unique:users',
             'password' => 'required|min:5|confirmed',
             'first_name' => 'required',
+=======
+            'email'        => 'required|email|unique:users',
+            'password'     => 'required|min:8|confirmed',
+            'first_name'   => 'required',
+>>>>>>> master
             'terms_agreed' => $is_attendize ? 'required' : '',
         ]);
 
@@ -66,7 +72,7 @@ class UserSignupController extends Controller
                 ['first_name' => $user->first_name, 'confirmation_code' => $user->confirmation_code],
                 function ($message) use ($request) {
                     $message->to($request->get('email'), $request->get('first_name'))
-                        ->subject('Thank you for registering for Attendize');
+                        ->subject(trans("Email.attendize_register"));
                 });
         }
 
@@ -87,7 +93,7 @@ class UserSignupController extends Controller
 
         if (!$user) {
             return view('Public.Errors.Generic', [
-                'message' => 'The confirmation code is missing or malformed.',
+                'message' => trans("Controllers.confirmation_malformed"),
             ]);
         }
 
@@ -95,7 +101,7 @@ class UserSignupController extends Controller
         $user->confirmation_code = null;
         $user->save();
 
-        session()->flash('message', 'Success! Your email is now verified. You can now login.');
+        session()->flash('message', trans("Controllers.confirmation_successful"));
 
         return redirect()->route('login');
     }
