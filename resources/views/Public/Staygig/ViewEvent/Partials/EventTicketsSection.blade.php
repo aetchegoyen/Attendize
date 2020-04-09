@@ -84,9 +84,7 @@
                                 <div class="relative w-full">
                                     <select name="ticket_{{$ticket->id}}" class="text-base form-control w-full">
                                     <div class="relative">    
-                                        @if ($tickets->count() > 1)
-                                            <option value="0">0</option>
-                                        @endif
+                                        <option value="0">0</option>
                                         @for($i=$ticket->min_per_person; $i<=$ticket->max_per_person; $i++)
                                             <option value="{{$i}}">{{$i}}</option>
                                         @endfor
