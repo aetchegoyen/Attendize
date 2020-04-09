@@ -174,7 +174,12 @@
 
                 <div class="panel-body">
                     {{$event->streaming_url ? "Seteada" : "No seteada"}}
-                    {!! Form::input('text', 'streaming_url', $event->streaming_url, ['class' => 'form-control', 'onclick' => 'this.select();']) !!}
+                    @if($event->streaming_url)
+                    <iframe id="ytplayer" type="text/html" width="100%" height="200"
+                    src="http://www.youtube.com/embed/{{$event->streaming_url}}?autoplay=0"
+                    frameborder="0"></iframe>
+                    @endif
+                    {!! Form::input('text', 'streaming_url', "http://www.youtube.com/embed/".$event->streaming_url, ['class' => 'form-control', 'onclick' => 'this.select();']) !!}
                 </div>
 
             </div>

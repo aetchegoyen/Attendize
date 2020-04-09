@@ -18,4 +18,5 @@ return array(
     'ticket_sales_volume'     => 'Volumen de venta de entradas',
     'tickets_sold'            => 'Entradas Vendidas',
     'website_embed_code'      => 'Código de incrustación web',
+    'streaming_url'           => 'Url de streaming',
 );

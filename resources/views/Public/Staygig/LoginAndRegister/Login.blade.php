@@ -1,5 +1,7 @@
 @extends('Shared.Layouts.MasterWithoutMenus')
 
+@include('Shared.Partials.BgVideo')
+
 @section('title', trans("User.login"))
 
 @section('content')
