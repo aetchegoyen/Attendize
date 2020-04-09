@@ -96,5 +96,6 @@ return [
     "event_online"                      => 'El vento ya está online',
     "enter_your_access_code"                      => 'Ingresa tu código aquí para acceder',
     "access_code"                      => 'Código de acceso',
+    'go_to_event'                => 'Acceder al evento',
     
 ];

@@ -6,10 +6,6 @@
         <div class="text-center py-4 lg:px-4 text-base">
             <div class="py-2 px-4 bg-green-200 items-center text-green-800 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
                 <span class="font-semibold mr-2 text-left flex-auto">
-                    {{ @trans("Public_ViewEvent.your") }}
-                    <a class="text-green-700 border-b-2" href="{{ route('showOrderTickets', ['order_reference' => $order->order_reference] ).'?download=1' }}">
-                        {{ @trans("Public_ViewEvent.tickets") }}
-                    </a>
                     {{ @trans("Public_ViewEvent.confirmation_email") }}
                 </span>
             </div>

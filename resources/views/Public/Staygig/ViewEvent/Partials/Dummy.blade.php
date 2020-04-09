@@ -56,7 +56,7 @@
 
         {!! Form::token() !!}
 
-        {!! Form::submit(trans("Public_ViewEvent.complete_payment"), ['class' => 'btn-block bg-green-700 text-white font-bold py-2 px-4 mt-6 rounded w-full']) !!}
+        {!! Form::submit(trans("Public_ViewEvent.complete_payment"), ['class' => 'btn-block bg-green-700 text-white font-bold py-2 px-4 mt-6 rounded w-full cursor-pointer']) !!}
 
     </div>
 </form>

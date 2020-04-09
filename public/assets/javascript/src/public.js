@@ -184,7 +184,9 @@ $(function() {
         $('.contact_form').slideToggle();
     });
 
-    $('#mirror_buyer_info').on('click', function(e) {
+    $('#mirror_buyer_info').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         $('.ticket_holder_first_name').val($('#order_first_name').val());
         $('.ticket_holder_last_name').val($('#order_last_name').val());
         $('.ticket_holder_email').val($('#order_email').val());

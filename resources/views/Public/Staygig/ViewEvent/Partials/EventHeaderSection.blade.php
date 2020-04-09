@@ -36,7 +36,7 @@
     <hr class="border-b border-gray-100 opacity-25 my-0 py-0" />
 </nav>
 @if(!$event->is_live)
-<section id="goLiveBar" class="bg-yellow-400 text-yellow-800 text-xs text-center p-2">
+<section id="goLiveBar" class="bg-yellow-00 text-yellow-800 text-xs text-center p-2">
     @if(!$event->is_live)
     {{ @trans("ManageEvent.event_not_live") }}
     <a href="{{ route('MakeEventLive' , ['event_id' => $event->id]) }}"

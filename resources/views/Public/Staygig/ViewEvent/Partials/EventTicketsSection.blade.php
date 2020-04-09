@@ -70,14 +70,14 @@
 
                     <div class="w-1/5 flex items-center pr-4">
                         @if($ticket->is_paused)
-                            <span class="text-danger"> @lang("Public_ViewEvent.currently_not_on_sale") </span>
+                            <span class="text-orange-500 font-bold"> @lang("Public_ViewEvent.currently_not_on_sale") </span>
                         @else
                             @if($ticket->sale_status === config('attendize.ticket_status_sold_out'))
-                                <span class="text-danger" property="availability" content="http://schema.org/SoldOut">@lang("Public_ViewEvent.sold_out")</span>
+                                <span class="text-red-500 font-bold" property="availability" content="http://schema.org/SoldOut">@lang("Public_ViewEvent.sold_out")</span>
                             @elseif($ticket->sale_status === config('attendize.ticket_status_before_sale_date'))
-                                <span class="text-danger">@lang("Public_ViewEvent.sales_have_not_started")</span>
+                                <span class="text-orange-500 font-bold">@lang("Public_ViewEvent.sales_have_not_started")</span>
                             @elseif($ticket->sale_status === config('attendize.ticket_status_after_sale_date'))
-                                <span class="text-danger">@lang("Public_ViewEvent.sales_have_ended")</span>
+                                <span class="text-orange-500 font-bold">@lang("Public_ViewEvent.sales_have_ended")</span>
                             @else
                                 {!! Form::hidden('tickets[]', $ticket->id) !!}
                                 <meta property="availability" content="http://schema.org/InStock">

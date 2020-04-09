@@ -202,7 +202,7 @@
                 <script>showMessage('{{session()->get('message')}}');</script>
             @endif
 
-        {!! Form::submit(trans("Public_ViewEvent.checkout_order"), ['class' => 'btn-block bg-green-700 text-white font-bold py-2 px-4 rounded w-full']) !!}
+        {!! Form::submit(trans("Public_ViewEvent.checkout_order"), ['class' => 'btn-block bg-green-700 text-white font-bold py-2 px-4 rounded w-full cursor-pointer']) !!}
         </div>
     </div>
     {!! Form::hidden('is_embedded', $is_embedded) !!}
