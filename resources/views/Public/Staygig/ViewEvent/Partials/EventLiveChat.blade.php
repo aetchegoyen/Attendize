@@ -15,7 +15,7 @@
 <form onsubmit="return sendMessage();" class="flex flex-grow-0 -mx-6 -mb-6 bg-gray-300 p-4 shadow-lg flex-row">
     {!! Form::text("message", null, [
             'id' => "chtMsg",
-            'placeholder' => trans("Basic.message"),
+            'placeholder' => trans("basic.message"),
             'autocomplete' => "off",
             'class' => 'flex flex-grow rounded-l-full px-4 py-2']) !!}
     {!! Form::hidden('chtName', $attendee->first_name."_".$attendee_key, [
@@ -27,5 +27,5 @@
     {!! Form::hidden('chtEid', $event->id, [
         'id' => "chtEid",
 ]) !!}
-    <input type="submit" value="@lang("Basic.submit")" class="flex rounded-r-full px-4 py-2 cursor-pointer bg-gray-400 text-gray-600">
+    <input type="submit" value="@lang("basic.submit")" class="flex rounded-r-full px-4 py-2 cursor-pointer bg-gray-400 text-gray-600">
 </form>
