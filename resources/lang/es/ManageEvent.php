@@ -8,7 +8,7 @@ return array(
     'attendee_cancelled'                      => 'Cancelado',
     'attendee_cancelled_help'                 => 'Este asistente ha sido cancelado',
     'attendees_file_requirements'             => 'El archivo debe ser .csv y la primera línea debe contener nombre,apellidos,email',
-    'attendize_qrcode_check_in'               => 'Código QR de registro Attendize',
+    'attendize_qrcode_check_in'               => 'Código QR de registro Streaming Tickets',
     'cancel_attendee_title'                   => 'Cancelar :cancel',
     'cancel_description'                      => 'La cancelación de asistentes los eliminará de la lista de participantes.',
     'cancel_notify'                           => 'Notificar a :name que su entrada ha sido cancelada.',

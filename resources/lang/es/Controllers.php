@@ -4,6 +4,7 @@ return array(
     'account_successfully_updated'              => 'Cuenta correctamente actualizada',
     'addInviteError'                            => 'Es necesario crear una entrada antes de poder invitar a un asistente.',
     'attendee_already_cancelled'                => 'Asistente ya cancelado',
+    'attendee_check_in_success'         => 'Checkin registrado con éxito ',
     'attendee_already_checked_in'               => 'El asistente ya se ha registrado a las :time ',
     'attendee_exception'                        => 'Se ha producido un error al invitar a este asistente. Por favor, inténtalo de nuevo.',
     'attendee_successfully_checked_in'          => 'El asistente se registró con éxito',
@@ -107,4 +108,5 @@ return array(
     'tickets_for_event'                         => 'Sus entradas para el evento :event.',
     'whoops'                                    => '¡Ups! Parece que algo salió mal. Por favor, inténtalo de nuevo.',
     'your_password_reset_link'                  => 'Enlace de restablecimiento de contraseña',
+    'new_order_received'                        => 'Nuevo pedido recibido',
 );

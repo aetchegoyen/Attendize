@@ -1,16 +1,3 @@
-@if(!$event->is_live)
-<section id="goLiveBar">
-    <div class="container">
-        @if(!$event->is_live)
-
-        {{ @trans("ManageEvent.event_not_live") }}
-        <a href="{{ route('MakeEventLive' , ['event_id' => $event->id]) }}"
-           style="background-color: green; border-color: green;"
-        class="btn btn-success btn-xs">{{ @trans("ManageEvent.publish_it") }}</a>
-        @endif
-    </div>
-</section>
-@endif
 <!--Nav-->
 <nav id="header" class="bg-gray-800 w-full z-30 text-white relative">
 
@@ -48,3 +35,12 @@
 
     <hr class="border-b border-gray-100 opacity-25 my-0 py-0" />
 </nav>
+@if(!$event->is_live)
+<section id="goLiveBar" class="bg-yellow-400 text-yellow-800 text-xs text-center p-2">
+    @if(!$event->is_live)
+    {{ @trans("ManageEvent.event_not_live") }}
+    <a href="{{ route('MakeEventLive' , ['event_id' => $event->id]) }}"
+        class="py-1 px-2 bg-green-300 text-green-600 text-xs rounded-lg">{{ @trans("ManageEvent.publish_it") }}</a>
+    @endif
+</section>
+@endif
