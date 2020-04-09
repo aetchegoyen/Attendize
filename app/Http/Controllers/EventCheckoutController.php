@@ -267,10 +267,10 @@ class EventCheckoutController extends Controller
                 ];
 
         if ($this->is_embedded) {
-            return view('Public.ViewEvent.Embedded.EventPageCheckout', $data);
+            return view(config('attendize.public_template_base').'ViewEvent.Embedded.EventPageCheckout', $data);
         }
 
-        return view('Public.ViewEvent.EventPageCheckout', $data);
+        return view(config('attendize.public_template_base').'ViewEvent.EventPageCheckout', $data);
 
     }
 
@@ -370,7 +370,7 @@ class EventCheckoutController extends Controller
                      'payment_failed' => $payment_failed
         ];
 
-        return view('Public.ViewEvent.EventPagePayment', $viewData);
+        return view(config('attendize.public_template_base').'ViewEvent.EventPagePayment', $viewData);
     }
 
     /**
@@ -765,10 +765,10 @@ class EventCheckoutController extends Controller
         ];
 
         if ($this->is_embedded) {
-            return view('Public.ViewEvent.Embedded.EventPageViewOrder', $data);
+            return view(config('attendize.public_template_base').'ViewEvent.Embedded.EventPageViewOrder', $data);
         }
 
-        return view('Public.ViewEvent.EventPageViewOrder', $data);
+        return view(config('attendize.public_template_base').'ViewEvent.EventPageViewOrder', $data);
     }
 
     /**
@@ -802,9 +802,9 @@ class EventCheckoutController extends Controller
         ];
 
         if ($request->get('download') == '1') {
-            return PDF::html('Public.ViewEvent.Partials.PDFTicket', $data, 'Tickets');
+            return PDF::html(config('attendize.public_template_base').'ViewEvent.Partials.PDFTicket', $data, 'Tickets');
         }
-        return view('Public.ViewEvent.Partials.PDFTicket', $data);
+        return view(config('attendize.public_template_base').'ViewEvent.Partials.PDFTicket', $data);
     }
 
 }

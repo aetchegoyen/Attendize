@@ -36,6 +36,20 @@ module.exports = function (grunt) {
                 ],
                 dest: './public/assets/javascript/frontend.js',
             },
+            js_new_frontend: {
+                src: [
+                    './public/vendor/jquery/dist/jquery.min.js',
+                    './public/vendor/jquery-form/jquery.form.js',
+                    './public/vendor/RRSSB/js/rrssb.js',
+                    './public/vendor/humane-js/humane.js',
+                    './public/vendor/jquery.payment/lib/jquery.payment.js',
+                    './public/vendor/video.js/dist/video.min.js',
+                    './public/vendor/videojs-youtube/dist/Youtube.min.js',
+                    './public/vendor/jquery.payment/lib/jquery.payment.js',
+                    './public/assets/javascript/src/public.js'
+                ],
+                dest: './public/assets/javascript/dist/public.js',
+            },
             js_backend: {
                 src: [
                     './public/vendor/modernizr/modernizr.js',
@@ -63,6 +77,11 @@ module.exports = function (grunt) {
             frontend: {
                 files: {
                     './public/assets/javascript/frontend.js': ['<%= concat.js_frontend.dest %>'],
+                }
+            },
+            public: {
+                files: {
+                    './public/assets/javascript/public.js': ['<%= concat.js_new_frontend.dest %>'],
                 }
             },
             backend: {

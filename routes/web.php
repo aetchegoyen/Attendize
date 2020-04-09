@@ -149,6 +149,10 @@ Route::group(
             [EventViewController::class, 'showEventHome']
         )->name('showEventPage');
 
+        Route::get('/{event_id}/{event_slug?}/live/{reference?}',
+            [EventViewController::class, 'showLiveEventHome']
+        )->name('showLiveEventPage');;
+
         Route::post('/{event_id}/contact_organiser',
             [EventViewController::class, 'postContactOrganiser']
         )->name('postContactOrganiser');
@@ -632,6 +636,10 @@ Route::group(
             Route::post('{event_id}/qrcode_check_in',
                 [EventCheckInController::class, 'postCheckInAttendeeQr']
             )->name('postQRCodeCheckInAttendee');
+
+            Route::post('{event_id}/code_check_in', 
+                [EventCheckInController::class, 'postCheckInAttendeeCode']
+            )->name('postCheckInAttendeeCode');
 
             Route::post('{event_id}/confirm_order_tickets/{order_id}',
                 [EventCheckInController::class, 'confirmOrderTicketsQr']

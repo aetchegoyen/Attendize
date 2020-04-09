@@ -57,7 +57,7 @@ class OrganiserViewController extends Controller
             'past_events'     => $past_events,
         ];
 
-        return view('Public.ViewOrganiser.OrganiserPage', $data);
+        return view(config('attendize.public_template_base').'ViewOrganiser.OrganiserPage', $data);
     }
 
     /**

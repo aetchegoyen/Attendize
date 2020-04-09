@@ -27,7 +27,7 @@ class UserSignupController extends Controller
     public function showSignup()
     {
         $is_attendize = Utils::isAttendize();
-        return view('Public.LoginAndRegister.Signup', compact('is_attendize'));
+        return view(config('attendize.public_template_base').'LoginAndRegister.Signup', compact('is_attendize'));
     }
 
     /**
@@ -86,7 +86,7 @@ class UserSignupController extends Controller
         $user = User::whereConfirmationCode($confirmation_code)->first();
 
         if (!$user) {
-            return view('Public.Errors.Generic', [
+            return view(config('attendize.public_template_base').'Errors.Generic', [
                 'message' => trans("Controllers.confirmation_malformed"),
             ]);
         }

@@ -23,6 +23,6 @@ class EventViewEmbeddedController extends Controller
             'is_embedded' => '1',
         ];
 
-        return view('Public.ViewEvent.Embedded.EventPage', $data);
+        return view(config('attendize.public_template_base').'ViewEvent.Embedded.EventPage', $data);
     }
 }

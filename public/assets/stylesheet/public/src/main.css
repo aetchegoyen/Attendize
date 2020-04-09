@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+
+
+@tailwind utilities;
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.custom-number-input input:focus {
+   outline: none !important;
+}
+
+.custom-number-input button:focus {
+    outline: none !important;
+}
+
+.p-spaced p{
+    @apply pb-4;
+}
+
+.title{
+    @apply text-gray-900 leading-tight;
+}
+
+h1.title{
+    @apply font-bold text-2xl;
+}
+
+h2.title{
+    @apply font-bold text-xl;
+}
+
+h3.title{
+    @apply text-xl;
+}
+
+.form-text{
+    @apply bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight;
+}
+
+.form-text:focus{
+    @apply outline-none bg-white border-gray-500;
+}
+
+select.form-control{
+    @apply block appearance-none bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight;
+}
+
+select.form-control:focus{
+    @apply outline-none bg-white border-gray-500;
+}
+button{
+    outline: none !important;
+}
+
+*{
+    outline: none;
+}
+
+.bg-poster{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    opacity: .2;
+}
+
+.bg-poster img{
+    width: 100%;
+    height: auto;
+    filter: blur(10px);
+}
+
+#vid1{
+    outline: none;
+    opacity: 0;
+    transition: opacity 3s;
+}
+
+#tfs{
+    right: 20px;
+    bottom: 50px;
+    z-index: 99;
+}
+
+#vid1:after{
+    width: 100%;
+    bottom: 30px;
+    position: absolute;
+    z-index: 9;
+    left: 0;
+    top: 0;
+    content: " ";
+}
+
+.chat-list{
+    @apply items-start pt-4;
+}
+.chat-list li{
+    @apply px-4 py-2 bg-gray-300 rounded-lg text-gray-800 mb-4 flex flex-grow-0 shadow-sm max-w-sm break-all flex-col;
+}
+
+.chat-list li.own{
+    @apply bg-green-200;
+}
+
+.chat-list li .name{
+    @apply text-sm font-bold;
+}
+
+.chat-list li .message{
+    @apply text-base;
+}
+
+.chat-list li .time{
+    @apply text-xs text-right text-gray-500;
+}
+
+.vjs-play-control{
+    display: none !important;
+}
+
+.vjs-progress-control{
+    visibility: hidden !important;
+}

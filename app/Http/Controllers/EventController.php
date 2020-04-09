@@ -10,6 +10,7 @@ use App\Models\Event;
 use App\Models\Organiser;
 use App\Models\EventImage;
 use Illuminate\Http\Request;
+use Alaouy\Youtube\Facades\Youtube;
 use Spatie\GoogleCalendar\Event as GCEvent;
 
 class EventController extends MyBaseController
@@ -52,34 +53,43 @@ class EventController extends MyBaseController
         $event->description = strip_tags($request->get('description'));
         $event->start_date = $request->get('start_date');
 
+        try {
+            $event->streaming_url = Youtube::parseVidFromURL($event->streaming_url);
+        } catch (\Exception $e) {
+            $event->streaming_url = $event->streaming_url;
+        }
+
         /*
          * Venue location info (Usually auto-filled from google maps)
          */
+        if (config('attendize.enable_events_location')) {
+            $is_auto_address = (trim($request->get('place_id')) !== '');
 
-        $is_auto_address = (trim($request->get('place_id')) !== '');
-
-        if ($is_auto_address) { /* Google auto filled */
-            $event->venue_name = $request->get('name');
-            $event->venue_name_full = $request->get('venue_name_full');
-            $event->location_lat = $request->get('lat');
-            $event->location_long = $request->get('lng');
-            $event->location_address = $request->get('formatted_address');
-            $event->location_country = $request->get('country');
-            $event->location_country_code = $request->get('country_short');
-            $event->location_state = $request->get('administrative_area_level_1');
-            $event->location_address_line_1 = $request->get('route');
-            $event->location_address_line_2 = $request->get('locality');
-            $event->location_post_code = $request->get('postal_code');
-            $event->location_street_number = $request->get('street_number');
-            $event->location_google_place_id = $request->get('place_id');
-            $event->location_is_manual = 0;
-        } else { /* Manually entered */
-            $event->venue_name = $request->get('location_venue_name');
-            $event->location_address_line_1 = $request->get('location_address_line_1');
-            $event->location_address_line_2 = $request->get('location_address_line_2');
-            $event->location_state = $request->get('location_state');
-            $event->location_post_code = $request->get('location_post_code');
-            $event->location_is_manual = 1;
+            if ($is_auto_address) { /* Google auto filled */
+                $event->venue_name = $request->get('name');
+                $event->venue_name_full = $request->get('venue_name_full');
+                $event->location_lat = $request->get('lat');
+                $event->location_long = $request->get('lng');
+                $event->location_address = $request->get('formatted_address');
+                $event->location_country = $request->get('country');
+                $event->location_country_code = $request->get('country_short');
+                $event->location_state = $request->get('administrative_area_level_1');
+                $event->location_address_line_1 = $request->get('route');
+                $event->location_address_line_2 = $request->get('locality');
+                $event->location_post_code = $request->get('postal_code');
+                $event->location_street_number = $request->get('street_number');
+                $event->location_google_place_id = $request->get('place_id');
+                $event->location_is_manual = 0;
+            } else { /* Manually entered */
+                $event->venue_name = $request->get('location_venue_name');
+                $event->location_address_line_1 = $request->get('location_address_line_1');
+                $event->location_address_line_2 = $request->get('location_address_line_2');
+                $event->location_state = $request->get('location_state');
+                $event->location_post_code = $request->get('location_post_code');
+                $event->location_is_manual = 1;
+            }
+        }else{
+            $event->venue_name = "Streaming";
         }
 
         $event->end_date = $request->get('end_date');
@@ -154,12 +164,10 @@ class EventController extends MyBaseController
             $event->ticket_sub_text_color = $defaults->ticket_sub_text_color;
         }
 
-
         try {
             $event->save();
         } catch (\Exception $e) {
             Log::error($e);
-
             return response()->json([
                 'status'   => 'error',
                 'messages' => trans("Controllers.event_create_exception"),
@@ -227,43 +235,53 @@ class EventController extends MyBaseController
         $event->start_date = $request->get('start_date');
         $event->google_tag_manager_code = $request->get('google_tag_manager_code');
 
+        try {
+            $event->streaming_url = $request->get('streaming_url') ? Youtube::parseVidFromURL($request->get('streaming_url')) : "";
+        } catch (\Exception $e) {
+            $event->streaming_url = $request->get('streaming_url');
+        }
+
         /*
          * If the google place ID is the same as before then don't update the venue
          */
-        if (($request->get('place_id') !== $event->location_google_place_id) || $event->location_google_place_id == '') {
-            $is_auto_address = (trim($request->get('place_id')) !== '');
+        if (config('attendize.enable_events_location')) {
+            if (($request->get('place_id') !== $event->location_google_place_id) || $event->location_google_place_id == '') {
+                $is_auto_address = (trim($request->get('place_id')) !== '');
 
-            if ($is_auto_address) { /* Google auto filled */
-                $event->venue_name = $request->get('name');
-                $event->venue_name_full = $request->get('venue_name_full');
-                $event->location_lat = $request->get('lat');
-                $event->location_long = $request->get('lng');
-                $event->location_address = $request->get('formatted_address');
-                $event->location_country = $request->get('country');
-                $event->location_country_code = $request->get('country_short');
-                $event->location_state = $request->get('administrative_area_level_1');
-                $event->location_address_line_1 = $request->get('route');
-                $event->location_address_line_2 = $request->get('locality');
-                $event->location_post_code = $request->get('postal_code');
-                $event->location_street_number = $request->get('street_number');
-                $event->location_google_place_id = $request->get('place_id');
-                $event->location_is_manual = 0;
-            } else { /* Manually entered */
-                $event->venue_name = $request->get('location_venue_name');
-                $event->location_address_line_1 = $request->get('location_address_line_1');
-                $event->location_address_line_2 = $request->get('location_address_line_2');
-                $event->location_state = $request->get('location_state');
-                $event->location_post_code = $request->get('location_post_code');
-                $event->location_is_manual = 1;
-                $event->location_google_place_id = '';
-                $event->venue_name_full = '';
-                $event->location_lat = '';
-                $event->location_long = '';
-                $event->location_address = '';
-                $event->location_country = '';
-                $event->location_country_code = '';
-                $event->location_street_number = '';
+                if ($is_auto_address) { /* Google auto filled */
+                    $event->venue_name = $request->get('name');
+                    $event->venue_name_full = $request->get('venue_name_full');
+                    $event->location_lat = $request->get('lat');
+                    $event->location_long = $request->get('lng');
+                    $event->location_address = $request->get('formatted_address');
+                    $event->location_country = $request->get('country');
+                    $event->location_country_code = $request->get('country_short');
+                    $event->location_state = $request->get('administrative_area_level_1');
+                    $event->location_address_line_1 = $request->get('route');
+                    $event->location_address_line_2 = $request->get('locality');
+                    $event->location_post_code = $request->get('postal_code');
+                    $event->location_street_number = $request->get('street_number');
+                    $event->location_google_place_id = $request->get('place_id');
+                    $event->location_is_manual = 0;
+                } else { /* Manually entered */
+                    $event->venue_name = $request->get('location_venue_name');
+                    $event->location_address_line_1 = $request->get('location_address_line_1');
+                    $event->location_address_line_2 = $request->get('location_address_line_2');
+                    $event->location_state = $request->get('location_state');
+                    $event->location_post_code = $request->get('location_post_code');
+                    $event->location_is_manual = 1;
+                    $event->location_google_place_id = '';
+                    $event->venue_name_full = '';
+                    $event->location_lat = '';
+                    $event->location_long = '';
+                    $event->location_address = '';
+                    $event->location_country = '';
+                    $event->location_country_code = '';
+                    $event->location_street_number = '';
+                }
             }
+        } else{
+            $event->venue_name = "Streaming";
         }
 
         $event->end_date = $request->get('end_date');

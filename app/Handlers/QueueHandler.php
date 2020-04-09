@@ -41,7 +41,7 @@ class QueueHandler
         exit($pdf_file);
 
         PDF::setOutputMode('F'); // force to file
-        PDF::html('Public.ViewEvent.Partials.PDFTicket', $data, $pdf_file);
+        PDF::html(config('attendize.public_template_base').'ViewEvent.Partials.PDFTicket', $data, $pdf_file);
 
         //1
         $this->orderMailer->sendOrderNotification($order);

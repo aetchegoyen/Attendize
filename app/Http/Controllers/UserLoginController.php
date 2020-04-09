@@ -35,7 +35,7 @@ class UserLoginController extends Controller
             ]);
         }
 
-        return View::make('Public.LoginAndRegister.Login');
+        return View::make(config('attendize.public_template_base').'LoginAndRegister.Login');
     }
 
     /**

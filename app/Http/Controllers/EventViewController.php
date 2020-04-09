@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Attendize\Utils;
-use App\Models\Affiliate;
-use App\Models\Event;
-use App\Models\EventAccessCodes;
-use App\Models\EventStats;
 use Auth;
-use Cookie;
-use Illuminate\Http\Request;
 use Mail;
+use Cookie;
 use Validator;
+use App\Models\Event;
+use App\Attendize\Utils;
+use App\Models\Attendee;
+use App\Models\Affiliate;
+use App\Models\EventStats;
+use Illuminate\Http\Request;
+use App\Models\EventAccessCodes;
 
 class EventViewController extends Controller
 {
@@ -29,13 +30,14 @@ class EventViewController extends Controller
         $event = Event::findOrFail($event_id);
 
         if (!Utils::userOwns($event) && !$event->is_live) {
-            return view('Public.ViewEvent.EventNotLivePage');
+            return view(config('attendize.public_template_base').'ViewEvent.EventNotLivePage');
         }
 
         $data = [
             'event' => $event,
             'tickets' => $event->tickets()->orderBy('sort_order', 'asc')->get(),
             'is_embedded' => 0,
+            'codeCheckInRoute' => route('postCheckInAttendeeCode', ['event_id' => $event->id])
         ];
         /*
          * Don't record stats if we're previewing the event page from the backend or if we own the event.
@@ -66,8 +68,59 @@ class EventViewController extends Controller
             }
         }
 
-        return view('Public.ViewEvent.EventPage', $data);
+        return view(config('attendize.public_template_base').'ViewEvent.EventPage', $data);
     }
+
+    /**
+     * Show the homepage for an event
+     *
+     * @param Request $request
+     * @param $event_id
+     * @param string $slug
+     * @param bool $preview
+     * @return mixed
+     */
+    public function showLiveEventHome(Request $request, $event_id, $slug = '', $reference='')
+    {
+        $event = Event::findOrFail($event_id);
+        $code = base64_decode($reference);
+        $attendee = Attendee::withoutCancelled()
+            ->join('tickets', 'tickets.id', '=', 'attendees.ticket_id')
+            ->where(function ($query) use ($event, $code) {
+                $query->where('attendees.event_id', $event->id)
+                    ->where('attendees.private_reference_number', $code);
+            })->select([
+                'attendees.id',
+                'attendees.order_id',
+                'attendees.first_name',
+                'attendees.last_name',
+                'attendees.email',
+                'attendees.reference_index',
+                'attendees.arrival_time',
+                'attendees.has_arrived',
+                'tickets.title as ticket',
+            ])->first();
+
+        // var_dump($attendee); die;
+        if (!Utils::userOwns($event) && !$event->is_live) {
+            $attendee = false;
+        }
+
+        $attendee_key = false;
+
+        if($attendee){
+            $attendee_key = substr(md5($attendee->id),0,5);
+        }
+
+        $data = [
+            'event' => $event,
+            'attendee' => $attendee,
+            'attendee_key' => $attendee_key
+        ];
+
+        return view(config('attendize.public_template_base').'ViewEvent.EventLivePage', $data);
+    }
+
 
     /**
      * Show preview of event homepage / used for backend previewing
@@ -174,7 +227,7 @@ class EventViewController extends Controller
         // Bump usage count
         EventAccessCodes::logUsage($event_id, $accessCode);
 
-        return view('Public.ViewEvent.Partials.EventHiddenTicketsSelection', [
+        return view(config('attendize.public_template_base').'ViewEvent.Partials.EventHiddenTicketsSelection', [
             'event' => $event,
             'tickets' => $unlockedHiddenTickets,
             'is_embedded' => 0,

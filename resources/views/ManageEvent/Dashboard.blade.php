@@ -163,6 +163,22 @@
                     @endif
                 </div>
             </div>
+
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="ico-link mr5 ellipsis"></i>
+                        @lang("Dashboard.streaming_url")
+                    </h3>
+                </div>
+
+                <div class="panel-body">
+                    {{$event->streaming_url ? "Seteada" : "No seteada"}}
+                    {!! Form::input('text', 'streaming_url', $event->streaming_url, ['class' => 'form-control', 'onclick' => 'this.select();']) !!}
+                </div>
+
+            </div>
+
             <div class="panel panel-success">
                 <div class="panel-heading">
                     <h3 class="panel-title">

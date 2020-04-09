@@ -32,7 +32,9 @@
     "vue-resource": "^0.7.0",
     "html.sortable": "^0.3.1",
     "jquery.payment": "^1.4.2",
-    "datetimepicker": "flat-datetimepicker#^0.1.38"
+    "datetimepicker": "flat-datetimepicker#^0.1.38",
+    "videojs-youtube": "^2.6.1",
+    "video.js": "^7.8.0"
   },
   "resolutions": {
     "jquery": ">=1.5",

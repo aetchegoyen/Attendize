@@ -47,7 +47,7 @@ class RemindersController extends Controller
      */
     public function getRemind()
     {
-        return \View::make('Public.LoginAndRegister.ForgotPassword');
+        return \View::make(config('attendize.public_template_base').'LoginAndRegister.ForgotPassword');
     }
 
     /**
@@ -83,7 +83,7 @@ class RemindersController extends Controller
             \App::abort(404);
         }
 
-        return \View::make('Public.LoginAndRegister.ResetPassword')->with('token', $token);
+        return \View::make(config('attendize.public_template_base').'LoginAndRegister.ResetPassword')->with('token', $token);
     }
 
     /**

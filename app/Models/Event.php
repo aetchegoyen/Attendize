@@ -43,8 +43,8 @@ class Event extends MyBaseModel
         return [
             'title'               => 'required',
             'description'         => 'required',
-            'location_venue_name' => 'required_without:venue_name_full',
-            'venue_name_full'     => 'required_without:location_venue_name',
+            'location_venue_name' => config('attendize.enable_events_location') ? 'required_without:venue_name_full' : '',
+            'venue_name_full'     => config('attendize.enable_events_location') ? 'required_without:location_venue_name' : '',
             'start_date'          => 'required|date_format:"' . $format . '"',
             'end_date'            => 'required|date_format:"' . $format . '"',
             'organiser_name'      => 'required_without:organiser_id',

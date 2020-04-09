@@ -4,6 +4,39 @@
 
 <div class="row">
     <div class="col-md-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    {!! Form::label('title', trans("Event.event_title"), array('class'=>'control-label required')) !!}
+                    {!!  Form::text('title', old('title'),
+                                                array(
+                                                'class'=>'form-control',
+                                                'placeholder'=>trans("Event.event_title_placeholder", ["name"=>Auth::user()->first_name])
+                                                ))  !!}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                @if($event->thumbnail)
+                <div class="row">
+                    <div class="col-sm-6">
+                @endif
+                <div class="form-group">
+                    {!! Form::label('streaming_url', trans("Event.event_streaming_url"), array('class'=>'control-label')) !!}
+                    {!!  Form::text('streaming_url', $event->streaming_url, [
+                                        'class'=>'form-control',
+                                        'placeholder'=>trans("Event.event_streaming_url")
+                            ])  !!}
+                </div>
+                @if($event->thumbnail)
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        {!! HTML::image($event->thumbnail->url) !!}
+                    </div>
+                </div>
+                @endif
+            </div>
+            
+        </div>
         <div class="form-group">
           {!! Form::label('currency_id', trans("ManageEvent.default_currency"), array('class'=>'control-label required')) !!}
           {!! Form::select('currency_id', $currencies, $event->currency_id, ['class' => 'form-control']) !!}
@@ -17,14 +50,6 @@
                                         'class'=>'form-control'
                                         ))  !!}
         </div>
-        <div class="form-group">
-            {!! Form::label('title', trans("Event.event_title"), array('class'=>'control-label required')) !!}
-            {!!  Form::text('title', old('title'),
-                                        array(
-                                        'class'=>'form-control',
-                                        'placeholder'=>trans("Event.event_title_placeholder", ["name"=>Auth::user()->first_name])
-                                        ))  !!}
-        </div>
 
         <div class="form-group">
            {!! Form::label('description', trans("Event.event_description"), array('class'=>'control-label')) !!}
@@ -35,6 +60,7 @@
                                         ))  !!}
         </div>
 
+        @if(config('attendize.enable_events_location'))
         <div class="form-group address-automatic" style="display:{{$event->location_is_manual ? 'none' : 'block'}};">
             {!! Form::label('name', trans("Event.venue_name"), array('class'=>'control-label required ')) !!}
             {!!  Form::text('venue_name_full', old('venue_name_full'),
@@ -114,6 +140,7 @@
                 @lang("Event.or(manual/existing_venue)") <a data-clear-field=".location_field" data-toggle-class=".address-automatic, .address-manual" data-show-less-text="{{$event->location_is_manual ? trans("Event.enter_manual"):trans("Event.enter_existing")}}" href="javascript:void(0);" class="show-more-options clear_location">{{$event->location_is_manual ? trans("Event.enter_existing"):trans("Event.enter_manual")}}</a>
             </span>
         </div>
+        @endif
 
         <div class="row">
             <div class="col-sm-6">

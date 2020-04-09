@@ -66,6 +66,7 @@
                             {!! Form::styledFile('event_image') !!}
 
                         </div>
+                        @if(config('attendize.enable_events_location'))
                         @if(!empty(config("attendize.google_maps_geocoding_key")))
                         <div class="form-group address-automatic">
                             {!! Form::label('name', trans("Event.venue_name"), array('class'=>'control-label required ')) !!}
@@ -200,7 +201,7 @@
                             </div>
                         </div>
                         @endif
-
+                        @endif
                         @if($organiser_id)
                             {!! Form::hidden('organiser_id', $organiser_id) !!}
                         @else

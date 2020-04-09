@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
 use File;
-use Illuminate\Http\Request;
-use App\Models\Currency;
 use Image;
 use Validator;
+use App\Models\Event;
+use App\Models\Currency;
+use Illuminate\Http\Request;
+use Alaouy\Youtube\Facades\Youtube;
 
 class EventCustomizeController extends MyBaseController
 {
@@ -27,6 +28,18 @@ class EventCustomizeController extends MyBaseController
         $image_path = $event->organiser->full_logo_path;
         if ($event->images->first() != null) {
             $image_path = $event->images()->first()->image_path;
+        }
+
+        $event->thumbnail = "";
+        if($event->streaming_url){
+            try {  
+                $video = Youtube::getVideoInfo($event->streaming_url);
+                if($video){
+                    $event->thumbnail = $video->snippet->thumbnails->default;
+                }
+            } catch (\Exception $e) {
+                $event->thumbnail = "";
+            }
         }
 
         return array_merge([
