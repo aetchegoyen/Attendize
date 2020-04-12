@@ -14124,6 +14124,11 @@ button{
   visibility: hidden !important;
 }
 
+.clipped{
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 80%, 0% 100%);
+          clip-path: polygon(0 0, 100% 0, 100% 80%, 0% 100%);
+}
+
 @media (min-width: 640px) {
   .sm\:sr-only {
     position: absolute;
