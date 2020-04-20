@@ -12,7 +12,7 @@
     -->
     <title>
         @section('title')
-            Attendize -
+            {{isset($organiser->name) ? $organiser->name : $event->organiser->name}}
         @show
     </title>
 
