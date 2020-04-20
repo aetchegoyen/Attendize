@@ -12,7 +12,7 @@
     -->
     <title>
         @section('title')
-            {{isset($organiser->name) ? $organiser->name : $event->organiser->name}}
+            {{isset($organiser->name) ? $organiser->name : $event->organiser->name}} - 
         @show
     </title>
 
