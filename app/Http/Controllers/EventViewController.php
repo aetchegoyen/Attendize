@@ -6,11 +6,13 @@ use Auth;
 use Mail;
 use Cookie;
 use Validator;
+use Carbon\Carbon;
 use App\Models\Event;
 use App\Attendize\Utils;
 use App\Models\Attendee;
 use App\Models\Affiliate;
 use App\Models\EventStats;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\EventAccessCodes;
 
@@ -231,6 +233,73 @@ class EventViewController extends Controller
             'event' => $event,
             'tickets' => $unlockedHiddenTickets,
             'is_embedded' => 0,
+        ]);
+    }
+
+    /**
+     * Check in an attendee
+     *
+     * @param $event_id
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function postCheckInAttendeeCode($event_id, Request $request)
+    {
+        $event = Event::scope()->findOrFail($event_id);
+
+        $code = $request->get('access_code');
+        $email = $request->get('email');
+        $attendee = Attendee::scope()->withoutCancelled()
+            ->join('tickets', 'tickets.id', '=', 'attendees.ticket_id')
+            ->where(function ($query) use ($event, $code, $email) {
+                $query->where('attendees.event_id', $event->id)
+                    ->where('attendees.private_reference_number', $code)
+                    ->where('attendees.email', $email);
+            })->select([
+                'attendees.id',
+                'attendees.order_id',
+                'attendees.first_name',
+                'attendees.last_name',
+                'attendees.email',
+                'attendees.reference_index',
+                'attendees.arrival_time',
+                'attendees.has_arrived',
+                'tickets.title as ticket',
+            ])->first();
+
+        if (is_null($attendee)) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => trans("Controllers.invalid_ticket_error")
+            ]);
+        }
+
+        $relatedAttendesCount = Attendee::where('id', '!=', $attendee->id)
+            ->where([
+                'order_id'    => $attendee->order_id,
+                'has_arrived' => false
+            ])->count();
+
+        if ($attendee->has_arrived && false) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => trans("Controllers.attendee_already_checked_in", ["time"=> $attendee->arrival_time->format(config("attendize.default_datetime_format"))])
+            ]);
+        }
+
+        Attendee::find($attendee->id)->update(['has_arrived' => true, 'arrival_time' => Carbon::now()]);
+
+        return response()->json([
+            'status'  => 'success',
+            'name' => $attendee->first_name." ".$attendee->last_name,
+            'reference' => $attendee->reference,
+            'ticket' => $attendee->ticket,
+            'dest' => route('showLiveEventPage', [ 
+                'event_id' => $event_id, 
+                'reference' => base64_encode($code), 
+                'event_slug' => Str::slug($event->title) 
+                ]
+            )
         ]);
     }
 }
