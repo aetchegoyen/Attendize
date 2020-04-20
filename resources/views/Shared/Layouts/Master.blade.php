@@ -36,9 +36,13 @@
 @yield('pre_header')
 <header id="header" class="navbar">
 
-    <div class="navbar-header">
+    <div class="navbar-header" style="background-color: {{isset($organiser->page_header_bg_color) ? $organiser->page_header_bg_color : $event->organiser->page_header_bg_color}};">
         <a class="navbar-brand" href="javascript:void(0);">
-            <img style="width: 150px;" class="logo" alt="Attendize" src="{{asset('assets/images/logo-light.png')}}"/>
+            @if(isset($organiser->full_logo_path) || isset($event->organiser->full_logo_path))
+            <img style="height: 36px;" class="logo" alt="{{isset($organiser->name) ? $organiser->name : $event->organiser->name}}" src="{{URL::to(isset($organiser->full_logo_path) ? $organiser->full_logo_path : $event->organiser->full_logo_path)}}"/>
+            @else
+            {{isset($organiser->name) ? $organiser->full_logo_path : $event->organiser->name}}
+            @endif
         </a>
     </div>
 

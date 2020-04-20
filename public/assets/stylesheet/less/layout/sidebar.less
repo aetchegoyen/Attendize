@@ -134,6 +134,7 @@
                 }
                 a {
                     color: @white;
+                    font-weight: bold;
 
                     > .figure > [class^="ico-"],
                     > .figure > [class*=" ico-"] {
@@ -146,11 +147,12 @@
             // -----------------------------------
             &.open {
                 a {
-                    color: lighten(@sidebar-base-color, 60%);
+                    color: fade(@white, 90%);
+                    font-weight: bold;
 
                     > .figure > [class^="ico-"],
                     > .figure > [class*=" ico-"] {
-                        border-color: lighten(@sidebar-base-color, 60%);
+                        border-color: fade(@white, 90%);
                     }
 
                     > .arrow {
@@ -170,18 +172,18 @@
                 width: 100%;
                 font-size: 12px;
                 text-decoration: none;
-                color: lighten(@sidebar-base-color, 50%);
+                color: fade(@white, 80%);
                 outline: 0;
                 padding: 6px 25px 6px 12px;
 
                 // State - hover
                 // -----------------------------------
                 &:hover {
-                    color: lighten(@sidebar-base-color, 60%);
+                    color: fade(@white, 90%);
 
                     > .figure > [class^="ico-"],
                     > .figure > [class*=" ico-"] {
-                        border-color: lighten(@sidebar-base-color, 60%);
+                        border-color: fade(@white, 90%);
                     }
                 }
 

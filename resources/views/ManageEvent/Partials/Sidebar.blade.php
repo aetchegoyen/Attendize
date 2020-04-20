@@ -1,4 +1,4 @@
-<aside class="sidebar sidebar-left sidebar-menu">
+<aside class="sidebar sidebar-left sidebar-menu" style="background-color: {{$event->organiser->page_header_bg_color}};">
     <section class="content">
         <h5 class="heading">@lang("basic.main_menu")</h5>
         <ul id="nav_main" class="topmenu">

@@ -6,7 +6,7 @@
         <div class="flex items-center">
             <a class="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
                 href="#">
-                Staygig
+                Tickets Demo
             </a>
         </div>
 
@@ -22,13 +22,6 @@
         <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-white lg:bg-transparent text-black p-4 lg:p-0 z-20"
             id="nav-content">
             <ul class="list-reset lg:flex justify-end flex-1 items-center">
-                <li class="mr-3">
-                    <a class="inline-block py-2 px-4 text-white font-bold no-underline" href="#">Active</a>
-                </li>
-                <li class="mr-3">
-                    <a class="inline-block text-gray-100 no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
-                        href="#">link</a>
-                </li>
                 <li class="mr-3">
                     <a class="inline-block text-gray-100 no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
                         href="{{route('login')}}">Acceder</a>

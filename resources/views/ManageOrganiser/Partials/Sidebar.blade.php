@@ -1,4 +1,4 @@
-<aside class="sidebar sidebar-left sidebar-menu">
+<aside class="sidebar sidebar-left sidebar-menu" style="background-color: {{$organiser->page_header_bg_color}};">
     <section class="content">
         <h5 class="heading">@lang("Organiser.organiser_menu")</h5>
 

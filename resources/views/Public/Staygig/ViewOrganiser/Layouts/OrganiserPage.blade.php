@@ -1,13 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
-        <title>{{{$organiser->name}}} - StreamingTickets</title>
-
-
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
-
+        <title>{{{$organiser->name}}}</title>
 
         <!-- Open Graph data -->
         <meta property="og:title" content="{{{$organiser->name}}}" />
@@ -21,22 +15,31 @@
           <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-       {!!Html::style('assets/stylesheet/frontend.css')!!}
+
+        <!-- Open Graph data -->
+        {{-- <meta property="og:title" content="{{{$event->title}}}" /> --}}
+        <meta property="og:type" content="article" />
+        {{-- <meta property="og:url" content="{{$event->event_url}}?utm_source=fb" /> --}}
+        {{-- @if($event->images->count()) --}}
+        {{-- <meta property="og:image" content="{{config('attendize.cdn_url_user_assets').'/'.$event->images->first()['image_path']}}" /> --}}
+        {{-- @endif --}}
+        {{-- <meta property="og:description" content="{{Str::words(strip_tags(Markdown::convertToHtml($event->description))), 20}}" /> --}}
+        {{-- <meta property="og:site_name" content="Attendize.com" /> --}}
         @yield('head')
+
+        {!!HTML::style('assets/stylesheet/public/dist/main.css')!!}
+        {!!HTML::style('//cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css')!!}
+
     </head>
-    <body class="attendize">
+    <body class="font-sans text-base leading-normal tracking-normal" style="background-color: {{$organiser->page_bg_color}} !important;">
         @include('Shared.Partials.FacebookSdk')
-        <div id="organiser_page_wrap">
-            @yield('content')
-        </div>
+        @yield('content')
 
-        <a href="#intro" style="display:none;" class="totop"><i class="ico-angle-up"></i>
-            <span style="font-size:11px;">@lang("basic.TOP")</span></a>
-
+        {!! HTML::script('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js') !!}
         @include("Shared.Partials.LangScript")
-        {!!Html::script('assets/javascript/frontend.js')!!}
-
         @include('Shared.Partials.GlobalFooterJS')
+        {!! HTML::script('assets/javascript/dist/public.js') !!}
         @yield('foot')
-</body>
+
+    </body>
 </html>
