@@ -184,6 +184,8 @@ return [
         App\Providers\HelpersServiceProvider::class,
         Nitmedia\Wkhtml2pdf\L5Wkhtml2pdfServiceProvider::class,
 
+        Webup\LaravelSendinBlue\SendinBlueServiceProvider::class,
+
     ],
 
     /*

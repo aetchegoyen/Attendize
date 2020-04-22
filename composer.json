@@ -43,7 +43,8 @@
         "predis/predis": "~1.1",
         "stripe/stripe-php": "^7.1",
         "superbalist/php-money": "^2.0",
-        "vinelab/http": "~1.5"
+        "vinelab/http": "~1.5",
+        "webup/laravel-sendinblue": "2.0.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.6",
