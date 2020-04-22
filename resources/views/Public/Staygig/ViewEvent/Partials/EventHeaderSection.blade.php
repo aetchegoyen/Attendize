@@ -1,12 +1,12 @@
 <!--Nav-->
-<nav id="header" class="bg-gray-800 w-full z-30 text-white relative">
+<nav id="header" class="w-full z-30 text-white relative" style="background-color: {{$event->organiser->page_header_bg_color}};">
 
-    <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
+    <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2 px-4">
 
         <div class="flex items-center">
             <a class="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
                 href="#">
-                STREAMING
+                <img src="{{URL::to($event->organiser->full_logo_path)}}" class="h-8" />
             </a>
         </div>
 
@@ -23,11 +23,8 @@
             id="nav-content">
             <ul class="list-reset lg:flex justify-end flex-1 items-center">
                 <li class="mr-3">
-                    <a class="inline-block py-2 px-4 text-white font-bold no-underline" href="#">Active</a>
-                </li>
-                <li class="mr-3">
-                    <a class="inline-block text-gray-100 no-underline hover:text-gray-800 hover:text-underline py-2 px-4"
-                        href="#">link</a>
+                    <a class="inline-block no-underline hover:text-underline py-2 px-4" style="color: {{$event->organiser->page_text_color}};"
+                        href="{{route('login')}}">Acceder</a>
                 </li>
             </ul>
         </div>

@@ -37,11 +37,11 @@
 </div> --}}
 
 @if($attendee)
-<div class="rounded-lg shadow-lg m-8 overflow-hidden flex md:flex-row relative">
-    <div class="md:w-8/12 video-container flex bg-black relative">
+<div id="event-container" class="md:flex-row md:min-h-auto md:h-auto">
+    <div id="livevideo" class="video-container md:w-8/12 ">
         @include('Public.Staygig.ViewEvent.Partials.EventLiveVideo')
     </div>
-    <div class="md:w-4/12 flex flex-col bg-gray-100 p-6">
+    <div id="livechat" class="md:w-4/12">
         @include('Public.Staygig.ViewEvent.Partials.EventLiveChat')
     </div>
 </div>

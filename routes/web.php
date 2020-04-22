@@ -129,6 +129,13 @@ Route::group(
 
     });
 
+    //TODO: Tomar de la base de datos
+    Route::domain('limbomusic.live')->group(function () {
+        Route::get('/', 
+            [OrganiserViewController::class, 'showOrganiserHome']
+        )->defaults('organiser_id', 2);
+    });
+
     /*
      * Public event page routes
      */

@@ -1,6 +1,6 @@
 {!! Form::open(['url' => route('postValidateOrder', ['event_id' => $event->id ]), 'class' => 'ajax payment-form']) !!}
-<div class="flex rounded-lg shadow-lg items-start">
-    <div class="w-full md:w-8/12 bg-cover bg-center rounded-tl-lg rounded-bl-lg md:rounded-lg p-6 bg-white">
+<div class="flex rounded-lg shadow-lg items-start flex-col md:flex-row">
+    <div class="w-full md:w-8/12 bg-cover bg-center rounded-t-lg md:rounded-tl-lg rounded-bl-lg md:rounded-lg p-6 bg-white">
         <div class="bg-gray-200 -mt-6 -mx-6 mb-4 p-6 rounded-t-lg">
             <div class="flex flex-row items-start">
                 @include('Public.Staygig.ViewEvent.Partials.EventDateSection')

@@ -14129,6 +14129,32 @@ button{
           clip-path: polygon(0 0, 100% 0, 100% 80%, 0% 100%);
 }
 
+#event-container{
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: calc(100vh - 48px);
+}
+
+#livevideo{
+  display: flex;
+  background-color: #000;
+  position: relative;
+  flex-grow: 0;
+}
+
+#livechat{
+  display: flex;
+  flex-direction: column;
+  background-color: #f7fafc;
+  padding: 1.5rem;
+  flex-grow: 1;
+}
+
 @media (min-width: 640px) {
   .sm\:sr-only {
     position: absolute;

@@ -131,3 +131,16 @@ button{
 .clipped{
     clip-path: polygon(0 0, 100% 0, 100% 80%, 0% 100%);
 }
+
+#event-container{
+    @apply rounded-lg shadow-lg mb-8 overflow-hidden flex flex-col relative;
+    height: calc(100vh - 48px);
+}
+
+#livevideo{
+    @apply flex bg-black relative flex-grow-0;
+}
+
+#livechat{
+    @apply flex flex-col bg-gray-100 p-6 flex-grow;
+}
