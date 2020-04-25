@@ -2777,16 +2777,16 @@ function initCheckout() {
 }
 
 function initCheckin() {
-    var $_messages = $('#checkInMessages');
+    var $_messages = $('.checkInMessages:visible');
     if ($_messages) {
         var _msgText = $_messages.text();
         var _msgClass = $_messages.attr("class");
     }
 
-    $('#apply_check_in_code').click(function(e) {
+    $('.apply_check_in_code').click(function(e) {
         var $button = $(this);
-        var $_accessCode = $('#access_code');
-        var $_email = $('#access_email');
+        var $_accessCode = $('.access_code:visible');
+        var $_email = $('.access_email:visible');
 
         var data = {
             'access_code': $_accessCode.val(),
