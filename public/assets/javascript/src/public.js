@@ -250,18 +250,13 @@ function initChat() {
         console.log(snapshot.val());
         var html = "";
         var className = snapshot.val().sender == $("#chtName").val() ? "own" : "";
-		// give each message a unique ID
-		html += "<li id='message-" + snapshot.key + "' class='"+className+"'>";
-		// show delete button if message is sent by me
-		// if (snapshot.val().sender == myName) {
-		// 	html += "<button data-id='" + snapshot.key + "' onclick='deleteMessage(this);'>";
-		// 		html += "Delete";
-		// 	html += "</button>";
-		// }
+        html += "<div class='flex "+className+"'>"
+		html += "<div id='message-" + snapshot.key + "'>";
         html += "<p class='name'>" + snapshot.val().sender + "</p>";
         html += "<p class='message'> " + snapshot.val().message + "</p>";
         html += "<p class='time'> " + snapshot.val().time + "</p>";
-		html += "</li>";
+		html += "</div>";
+		html += "</div>";
 
         document.getElementById("messages").innerHTML += html;
         
@@ -367,11 +362,11 @@ function adjustAspectRatio($e, w, h) {
 
 function scrollMsgs() {
 
-    if (!$('#messages li:last-child').length) {
+    if (!$('#messages>div').length) {
         return false;
     }
 
-    $('#messages').parent().get(0).scrollTop = $('#messages li:last-child').position().top;
+    $('#messages').parent().get(0).scrollTop = $('#messages>div:last-child').position().top;
     
 }
 

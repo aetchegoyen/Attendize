@@ -100,23 +100,27 @@ button{
 .chat-list{
     @apply items-start pt-4;
 }
-.chat-list li{
+.chat-list>div>div{
     @apply px-4 py-2 bg-gray-300 rounded-lg text-gray-800 mb-4 flex flex-grow-0 shadow-sm max-w-sm break-all flex-col;
 }
 
-.chat-list li.own{
+.chat-list .own{
+    @apply w-full flex flex-col items-end;
+}
+
+.chat-list .own>div{
     @apply bg-green-200;
 }
 
-.chat-list li .name{
+.chat-list>div>div .name{
     @apply text-sm font-bold;
 }
 
-.chat-list li .message{
+.chat-list>div>div .message{
     @apply text-base;
 }
 
-.chat-list li .time{
+.chat-list>div>div .time{
     @apply text-xs text-right text-gray-500;
 }
 
@@ -133,8 +137,14 @@ button{
 }
 
 #event-container{
-    @apply rounded-lg shadow-lg mb-8 overflow-hidden flex flex-col relative;
-    height: calc(100vh - 48px);
+    @apply rounded-lg shadow-lg mb-8 overflow-hidden flex relative;
+    height: calc(100vh - 64px);
+}
+
+@media(min-width: 768px){
+    #event-container{
+        height: auto;
+    }
 }
 
 #livevideo{

@@ -10,7 +10,7 @@
     </div>
 </div>
 <div class="flex overflow-y-scroll flex-grow relative">
-    <ul id="messages" class="absolute top-0 bottom-0 chat-list flex flex-col" ></ul>
+    <div id="messages" class="absolute top-0 bottom-0 chat-list flex flex-col w-full" ></div>
 </div>
 <form onsubmit="return sendMessage();" class="flex flex-grow-0 -mx-6 -mb-6 bg-gray-300 p-4 shadow-lg flex-row">
     {!! Form::text("message", null, [
