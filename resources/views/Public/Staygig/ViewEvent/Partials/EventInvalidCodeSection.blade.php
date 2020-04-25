@@ -26,17 +26,17 @@
                                 <p class="text-gray-800 text-lg mb-5">Por {{$event->organiser->name}}</p>
                                 <div class="text-sm -mt-2 p-0">
                                     @if($event->start_date->isFuture())
-                                    <div class="p-2 bg-green-600 items-center text-green-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert" data-start_date="{{$event->start_date->format("Y-m-d H:i:s")}}">
+                                    <div class="p-2 bg-green-600 items-center text-green-100 leading-none rounded-full flex lg:inline-flex" role="alert" data-start_date="{{$event->start_date->format("Y-m-d H:i:s")}}">
                                         <span class="font-semibold mx-2 text-left flex-auto"></span>
                                     </div>
                                     @endif
                                     @if($event->start_date->isPast() && $event->end_date->isFuture())
-                                    <div class="p-2 bg-green-800 items-center text-green-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
+                                    <div class="p-2 bg-green-800 items-center text-green-100 leading-none rounded-full flex lg:inline-flex" role="alert">
                                         <span class="font-semibold mx-2 text-left flex-auto">@lang("Public_ViewEvent.event_already", ['started' => trans('Public_ViewEvent.event_already_started')])</span>
                                     </div>
                                     @endif
                                     @if($event->end_date->isPast())
-                                    <div class="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
+                                    <div class="p-2 bg-indigo-800 items-center text-indigo-100 leading-none rounded-full flex lg:inline-flex" role="alert">
                                         <span class="font-semibold mx-2 text-left flex-auto">@lang("Public_ViewEvent.event_already", ['started' => trans('Public_ViewEvent.event_already_ended')])</span>
                                     </div>
                                     @endif

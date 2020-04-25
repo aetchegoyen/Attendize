@@ -16,7 +16,10 @@
                                 href="{{route('showOrganiserDashboard' , ['organiser_id' => $organiser->id])}}">@lang("Public_ViewOrganiser.organiser_dashboard")</a>
                         </li>
                     @endif
-                        
+                    <li>
+                        <a class="inline-block no-underline hover:text-underline py-2 px-4" style="color: {{$organiser->page_text_color}};"
+                            href="{{route('login')}}">Acceder</a>
+                    </li>
                 </ul>
             </div>
         </div>

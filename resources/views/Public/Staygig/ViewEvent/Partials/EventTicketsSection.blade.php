@@ -1,14 +1,14 @@
-<div class="w-full md:w-7/12 rounded-tl-lg rounded-bl-lg flex flex-grow-0 flex-col">
+<div class="w-full md:w-7/12 flex flex-grow-0 flex-col">
     <div class="flex">
         @if($event->images->first()['image_path'])
-        <img src="{{config('attendize.cdn_url_user_assets').'/'.$event->images->first()['image_path']}}" class="w-full h-auto rounded-t flex">
+        <img src="{{config('attendize.cdn_url_user_assets').'/'.$event->images->first()['image_path']}}" class="w-full h-auto flex rounded-t md:rounded-l md:rounded-r-none">
         @else
         <img src="https://source.unsplash.com/1600x900/?music,live" class="w-full h-auto rounded-t flex">
         @endif
     </div>
 </div>
 
-<div class="w-full md:w-5/12 flex flex-col flex-grow flex-shrink shadow-lg bg-white md:rounded-lg">
+<div class="w-full md:w-5/12 flex flex-col flex-grow flex-shrink shadow-lg bg-white md:rounded-r-lg">
 
     <div class="flex-1 bg-white rounded-t rounded-b-none shadow-lg p-4">
         <div class="flex flex-row items-start">
@@ -24,17 +24,17 @@
                     </div>
                     @else
                         @if($event->start_date->isFuture())
-                        <div class="p-2 bg-green-600 items-center text-green-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert" data-start_date="{{$event->start_date->format("Y-m-d H:i:s")}}">
+                        <div class="p-2 bg-green-600 items-center text-green-100 leading-none rounded-full flex lg:inline-flex" role="alert" data-start_date="{{$event->start_date->format("Y-m-d H:i:s")}}">
                             <span class="font-semibold mx-2 text-left flex-auto"></span>
                         </div>
                         @endif
                         @if($event->start_date->isPast() && $event->end_date->isFuture())
-                        <div class="p-2 bg-green-800 items-center text-green-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
+                        <div class="p-2 bg-green-800 items-center text-green-100 leading-none rounded-full flex lg:inline-flex" role="alert">
                             <span class="font-semibold mx-2 text-left flex-auto">@lang("Public_ViewEvent.event_already", ['started' => trans('Public_ViewEvent.event_already_started')])</span>
                         </div>
                         @endif
                         @if($event->end_date->isPast())
-                        <div class="p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
+                        <div class="p-2 bg-indigo-800 items-center text-indigo-100 leading-none rounded-full flex lg:inline-flex" role="alert">
                             <span class="font-semibold mx-2 text-left flex-auto">@lang("Public_ViewEvent.event_already", ['started' => trans('Public_ViewEvent.event_already_ended')])</span>
                         </div>
                         @endif
@@ -43,13 +43,14 @@
             </div>
         </div>
         @if($tickets->count() > 0 && $event->end_date->isFuture())
-            {!! Form::open(['url' => route('postValidateTickets', ['event_id' => $event->id]), 'class' => 'ajax']) !!}
+            {!! Form::open(['url' => route('postValidateTickets', ['event_id' => $event->id]), 'class' => 'ajax mt-4']) !!}
             <?php $is_free_event = true; ?>
+            <?php $i = 0; ?>
 
             @foreach($tickets->where('is_hidden', false) as $ticket)
             <div class="pb-4 pt-0">
                 <div class="flex bg-white shadow-lg rounded-lg overflow-hidden">
-                    <div class="w-4/5 p-4">
+                    <div class="flex flex-grow flex-col p-4">
                         <h1 class="text-gray-900 font-bold text-lg">{{$ticket->title}}</h1>
                         <p class="mt-1 text-gray-600 text-sm">{{$ticket->description}}</p>
                         <div class="flex item-center justify-between mt-1">
@@ -68,7 +69,7 @@
                         </div>
                     </div>
 
-                    <div class="w-1/5 flex items-center pr-4">
+                    <div class="w-22 flex items-center pr-4">
                         @if($ticket->is_paused)
                             <span class="text-orange-500 font-bold"> @lang("Public_ViewEvent.currently_not_on_sale") </span>
                         @else
@@ -83,8 +84,10 @@
                                 <meta property="availability" content="http://schema.org/InStock">
                                 <div class="relative w-full">
                                     <select name="ticket_{{$ticket->id}}" class="text-base form-control w-full">
-                                    <div class="relative">    
+                                    <div class="relative">                                    
+                                    @if($i > 0)
                                         <option value="0">0</option>
+                                    @endif
                                         @for($i=$ticket->min_per_person; $i<=$ticket->max_per_person; $i++)
                                             <option value="{{$i}}">{{$i}}</option>
                                         @endfor
@@ -98,6 +101,7 @@
                     </div> 
                 </div>
             </div>
+            <?php $i++; ?>
             @endforeach
             @if ($tickets->where('is_hidden', true)->count() > 0 && false)
             <div class=" has-access-codes" data-url="{{route('postShowHiddenTickets', ['event_id' => $event->id])}}">
@@ -127,15 +131,14 @@
             @endif
         @endif
 
-        <div class="formErrors text-red-500 text-center p-4"></div>
+        <div class="formErrors text-red-500 text-center p-4 hidden"></div>
 
     </div>
 
     <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow-lg p-4 pt-0">
         <div class="flex items-center justify-between">
             {!!Form::submit(trans("Public_ViewEvent.register"), [
-                'class' => 'btn-block bg-green-700 opacity-50 cursor-not-allowed text-white font-bold py-2 px-4 rounded w-full cursor-pointer',
-                "disabled" => "disabled"
+                'class' => 'btn-block bg-green-700 text-white font-bold py-2 px-4 rounded w-full cursor-pointer'
             ])!!}
         </div>
     </div>

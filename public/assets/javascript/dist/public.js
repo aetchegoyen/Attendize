@@ -2477,6 +2477,7 @@ ca=t.createStyleElement("vjs-styles-defaults");var da=p.$("head");da&&da.insertB
         beforeSerialize: function (jqForm, options) {
             window.doSubmit = true;
             clearFormErrors(jqForm[0]);
+            mirrorBuyer();
             toggleSubmitDisabled($submitButton);
         },
         beforeSubmit: function () {
@@ -2651,13 +2652,7 @@ $(function() {
         $('.contact_form').slideToggle();
     });
 
-    $('#mirror_buyer_info').on('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        $('.ticket_holder_first_name').val($('#order_first_name').val());
-        $('.ticket_holder_last_name').val($('#order_last_name').val());
-        $('.ticket_holder_email').val($('#order_email').val());
-    });
+    $('#mirror_buyer_info').on('click', mirrorBuyer);
 
     $('.card-number').payment('formatCardNumber');
     $('.card-cvc').payment('formatCardCVC');
@@ -2740,6 +2735,17 @@ function initChat() {
         scrollMsgs();
         first = false;
 	});
+}
+
+function mirrorBuyer(e) {
+    if (typeof e != "undefined") {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    console.log("hola");
+    $('.ticket_holder_first_name').val($('#order_first_name').val());
+    $('.ticket_holder_last_name').val($('#order_last_name').val());
+    $('.ticket_holder_email').val($('#order_email').val());
 }
 
 function initTimer() {

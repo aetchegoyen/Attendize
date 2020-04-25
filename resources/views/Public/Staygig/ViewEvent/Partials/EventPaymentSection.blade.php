@@ -1,5 +1,5 @@
-<div class="flex rounded-lg shadow-lg items-start" id='order_form'>
-    <div class="w-full md:w-8/12 bg-cover bg-center rounded-tl-lg rounded-bl-lg md:rounded-lg p-6 bg-white">
+<div class="flex rounded-lg shadow-lg items-start flex-col md:flex-row" id='order_form'>
+    <div class="w-full md:w-8/12 rounded-lg md:rounded-tl-lg md:rounded-bl-lg md:rounded-lg p-6 bg-white mb-6 md:mb-0">
         <div class="bg-gray-200 -mt-6 -mx-6 mb-4 p-6 rounded-t-lg">
             <div class="flex flex-row items-start">
 
@@ -7,11 +7,11 @@
                 <div>
                     <h1 class="w-full flex px-0 title">{{{$event->title}}}</h1>
                     <p class="text-gray-800 text-lg">Por {{$event->organiser->name}}</p>  
-                    <p class="text-gray-600 text-sm">{!! @trans("Public_ViewEvent.time", ["time"=>"<span id='countdown'></span>"]) !!}</p>              
                 </div>
             </div>
+            <p class="text-gray-600 text-xs mt-4">{!! @trans("Public_ViewEvent.time", ["time"=>"<span id='countdown'></span>"]) !!}</p>              
         </div>
-        <div class="event_order_form text-base p-4 md:pr-8">
+        <div class="event_order_form text-base md:p-4 md:pr-8">
             <h2 class="title">@lang("Public_ViewEvent.order_summary")</h2>
             @lang("Public_ViewEvent.below_order_details_header")
 

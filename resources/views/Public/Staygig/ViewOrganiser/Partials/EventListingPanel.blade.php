@@ -5,7 +5,7 @@
 <div class="flex flex-row items-start flex-wrap">
     @if(count($events))
         @foreach($events as $event)
-    <a class="flex w-full md:w-1/2 lg:w-1/3 xl:w-1/4 hover:scale-105 transform transition-all duration-200 ease-in-out cursor-pointer pr-6 pb-6 {{$class}}" href="{{$event->getEventUrlAttribute()}}">
+    <a class="flex w-full md:w-1/2 lg:w-1/3 xl:w-1/4 hover:scale-105 transform transition-all duration-200 ease-in-out cursor-pointer md:pr-6 pb-6 {{$class}}" href="{{$event->getEventUrlAttribute()}}">
         <div class="rounded-md shadow-lg flex-col w-full">
             <div class="div h-48 overflow-hidden items-end flex flex-col bg-gray-200 relative">
 

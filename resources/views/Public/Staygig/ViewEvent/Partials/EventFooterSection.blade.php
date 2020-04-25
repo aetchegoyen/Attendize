@@ -12,11 +12,14 @@
                     @if(Utils::userOwns($event->organiser))
                         &bull;
                         <li>
-                            <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3"
+                            <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3"  style="color: {{$event->organiser->page_text_color}};"
                                 href="{{route('showOrganiserDashboard' , ['organiser_id' => $event->organiser->id])}}">@lang("Public_ViewOrganiser.organiser_dashboard")</a>
                         </li>
                     @endif
-                        
+                    <li>
+                        <a class="inline-block no-underline hover:text-underline py-2 px-4" style="color: {{$event->organiser->page_text_color}};"
+                            href="{{route('login')}}">Acceder</a>
+                    </li>
                 </ul>
             </div>
         </div>

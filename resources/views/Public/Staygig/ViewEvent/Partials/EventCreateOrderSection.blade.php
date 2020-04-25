@@ -7,25 +7,25 @@
                 <div>
                     <h1 class="w-full flex px-0 title">{{{$event->title}}}</h1>
                     <p class="text-gray-800 text-lg">Por {{$event->organiser->name}}</p>  
-                    <p class="text-gray-600 text-sm">{!! @trans("Public_ViewEvent.time", ["time"=>"<span id='countdown'></span>"]) !!}</p>              
                 </div>
             </div>
+            <p class="text-gray-600 text-xs pt-4">{!! @trans("Public_ViewEvent.time", ["time"=>"<span id='countdown'></span>"]) !!}</p>              
         </div>
-        <div class="event_order_form text-base p-4 md:pr-8">
+        <div class="event_order_form text-base md:p-4 md:pr-8">
             {!! Form::hidden('event_id', $event->id) !!}
 
             <h2 class="title"> @lang("Public_ViewEvent.your_information")</h2>
 
             <div class="my-4 flex flex-row flex-wrap">
-                <div class="mb-4 md:w-1/2 max-w-sm pr-4">
-                    <div>
+                <div class="mb-4 w-full md:w-1/2 md:max-w-sm pr-4">
+                    <div class="w-full">
                         {!! Form::label("order_first_name", trans("Public_ViewEvent.first_name"), array('class' => "block text-gray-600 mb-1")) !!}
                         {!! Form::text("order_first_name", null, [
                             'required' => 'required', 
                             'class' => 'form-control form-text']) !!}
                     </div>
                 </div>
-                <div class="mb-4 md:w-1/2 max-w-sm pr-4">
+                <div class="mb-4 w-full md:w-1/2 max-w-sm pr-4">
                     <div>
                         {!! Form::label("order_last_name", trans("Public_ViewEvent.last_name"), array('class' => "block text-gray-600 mb-1")) !!}
                         {!! Form::text("order_last_name", null, [
@@ -33,7 +33,7 @@
                             'class' => 'form-control form-text']) !!}
                     </div>
                 </div>
-                <div class="mb-4 md:w-1/2 max-w-sm pr-4">
+                <div class="mb-4 w-full md:w-1/2 max-w-sm pr-4">
                     <div>
                         {!! Form::label("order_email", trans("Public_ViewEvent.email"), array('class' => "block text-gray-600 mb-1")) !!}
                         {!! Form::text("order_email", null, [
@@ -41,7 +41,7 @@
                             'class' => 'form-control form-text']) !!}
                     </div>
                 </div>
-                <div class="mb-4 md:w-1/2 max-w-sm px-4 md:pt-8">
+                <div class="mb-4 md:w-1/2 max-w-sm md:px-4 md:pt-8">
                     <div>
                         {!! Form::checkbox('is_business', 1, null, ['data-toggle' => 'toggle', 'id' => 'is_business', 'class' => 'mr-2']) !!}
                         {!! Form::label('is_business', trans("Public_ViewEvent.is_business"), ['class' => 'control-label']) !!}
@@ -49,49 +49,49 @@
                 </div>
             </div>
             <div class="my-4 flex flex-row flex-wrap hidden" id="business_details">
-                <div class="mb-4 md:w-1/2 max-w-sm pr-4">
+                <div class="mb-4 w-full md:w-1/2 max-w-sm pr-4">
                     <div>
                         {!! Form::label("business_name", trans("Public_ViewEvent.business_name"), array('class' => "block text-gray-600 mb-1")) !!}
                         {!! Form::text("business_name", null, [
                             'class' => 'form-control form-text']) !!}
                     </div>
                 </div>
-                <div class="mb-4 md:w-1/2 max-w-sm pr-4">
+                <div class="mb-4 w-full md:w-1/2 max-w-sm pr-4">
                     <div>
                         {!! Form::label("business_tax_number", trans("Public_ViewEvent.business_tax_number"), array('class' => "block text-gray-600 mb-1")) !!}
                         {!! Form::text("business_tax_number", null, [
                             'class' => 'form-control form-text']) !!}
                     </div>
                 </div>
-                <div class="mb-4 md:w-1/2 max-w-sm pr-4">
+                <div class="mb-4 w-full md:w-1/2 max-w-sm pr-4">
                     <div>
                         {!! Form::label("business_address_line1", trans("Public_ViewEvent.business_address_line1"), array('class' => "block text-gray-600 mb-1")) !!}
                         {!! Form::text("business_address_line1", null, [
                             'class' => 'form-control form-text']) !!}
                     </div>
                 </div>
-                <div class="mb-4 md:w-1/2 max-w-sm pr-4">
+                <div class="mb-4 w-full md:w-1/2 max-w-sm pr-4">
                     <div>
                         {!! Form::label("business_address_line2", trans("Public_ViewEvent.business_address_line2"), array('class' => "block text-gray-600 mb-1")) !!}
                         {!! Form::text("business_address_line2", null, [
                             'class' => 'form-control form-text']) !!}
                     </div>
                 </div>
-                <div class="mb-4 md:w-1/2 max-w-sm pr-4">
+                <div class="mb-4 w-full md:w-1/2 max-w-sm pr-4">
                     <div>
                         {!! Form::label("business_address_state", trans("Public_ViewEvent.business_address_state_province"), array('class' => "block text-gray-600 mb-1")) !!}
                         {!! Form::text("business_address_state", null, [
                             'class' => 'form-control form-text']) !!}
                     </div>
                 </div>
-                <div class="mb-4 md:w-1/2 max-w-sm pr-4">
+                <div class="mb-4 w-full md:w-1/2 max-w-sm pr-4">
                     <div>
                         {!! Form::label("business_address_city", trans("Public_ViewEvent.business_address_city"), array('class' => "block text-gray-600 mb-1")) !!}
                         {!! Form::text("business_address_city", null, [
                             'class' => 'form-control form-text']) !!}
                     </div>
                 </div>
-                <div class="mb-4 md:w-1/2 max-w-sm pr-4">
+                <div class="mb-4 w-full md:w-1/2 max-w-sm pr-4">
                     <div>
                         {!! Form::label("business_address_code", trans("Public_ViewEvent.business_address_code"), array('class' => "block text-gray-600 mb-1")) !!}
                         {!! Form::text("business_address_code", null, [
@@ -101,7 +101,7 @@
             </div>
                 
 
-            <div class="ticket_holders_detailsmt-4" >
+            <div class="ticket_holders_detailsmt-4 hidden" >
                 <h3 class="title mb-4">@lang("Public_ViewEvent.ticket_holder_information")</h3>
                 <?php
                     $total_attendee_increment = 0;
@@ -120,15 +120,15 @@
                                 <div class="p-4">
                                     <div class="mb-4">
                                         {!! Form::label("ticket_holder_first_name[{$i}][{$ticket['ticket']['id']}]", trans("Public_ViewEvent.first_name"), array('class' => "block text-gray-600 mb-1")) !!}
-                                        {!! Form::text("ticket_holder_first_name[{$i}][{$ticket['ticket']['id']}]", null, ['required' => 'required', 'class' => "ticket_holder_first_name.$i.{$ticket['ticket']['id']} ticket_holder_first_name form-control form-text"]) !!}
+                                        {!! Form::text("ticket_holder_first_name[{$i}][{$ticket['ticket']['id']}]", null, ['class' => "ticket_holder_first_name.$i.{$ticket['ticket']['id']} ticket_holder_first_name form-control form-text"]) !!}
                                     </div>
                                     <div class="mb-4">
                                         {!! Form::label("ticket_holder_last_name[{$i}][{$ticket['ticket']['id']}]", trans("Public_ViewEvent.last_name"), array('class' => "block text-gray-600 mb-1")) !!}
-                                        {!! Form::text("ticket_holder_last_name[{$i}][{$ticket['ticket']['id']}]", null, ['required' => 'required', 'class' => "ticket_holder_last_name.$i.{$ticket['ticket']['id']} ticket_holder_last_name form-control form-text"]) !!}
+                                        {!! Form::text("ticket_holder_last_name[{$i}][{$ticket['ticket']['id']}]", null, ['class' => "ticket_holder_last_name.$i.{$ticket['ticket']['id']} ticket_holder_last_name form-control form-text"]) !!}
                                     </div>
                                     <div class="mb-4">
                                         {!! Form::label("ticket_holder_email[{$i}][{$ticket['ticket']['id']}]", trans("Public_ViewEvent.email_address"), array('class' => "block text-gray-600 mb-1")) !!}
-                                        {!! Form::text("ticket_holder_email[{$i}][{$ticket['ticket']['id']}]", null, ['required' => 'required', 'class' => "ticket_holder_email.$i.{$ticket['ticket']['id']} ticket_holder_email form-control form-text"]) !!}
+                                        {!! Form::text("ticket_holder_email[{$i}][{$ticket['ticket']['id']}]", null, ['class' => "ticket_holder_email.$i.{$ticket['ticket']['id']} ticket_holder_email form-control form-text"]) !!}
                                     </div>
                                     <div class="row">
                                         @include('Public.Staygig.ViewEvent.Partials.AttendeeQuestions', ['ticket' => $ticket['ticket'],'attendee_number' => $total_attendee_increment++])
@@ -143,7 +143,7 @@
 
         </div>
     </div>
-    <div class="w-full md:w-4/12 flex flex-col flex-grow shadow-lg md:-mt-6 md:-ml-8  md:rounded-lg overflow-hidden">
+    <div class="w-full md:w-4/12 flex flex-col flex-grow shadow-lg mt-6 md:-mt-6 md:-ml-8  md:rounded-lg overflow-hidden">
         @if($event->images->first()['image_path'])
         <img src="{{config('attendize.cdn_url_user_assets').'/'.$event->images->first()['image_path']}}" class="w-full h-auto rounded-t">
         @else

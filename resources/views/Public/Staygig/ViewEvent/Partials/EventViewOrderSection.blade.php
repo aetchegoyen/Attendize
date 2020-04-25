@@ -1,19 +1,19 @@
-<div class="rounded-lg  shadow-lg rounded-tl-lg rounded-bl-lg md:rounded-lg p-6 bg-white">
+<div class="rounded-lg shadow-lg rounded-tl-lg rounded-bl-lg md:rounded-lg p-6 bg-white">
     {{-- Thanks --}}
     <div class="bg-green-500 -mt-6 -mx-6 mb-4 p-6 rounded-t-lg text-center">
         <h1 class="px-0 text-green-100 text-2xl">{{ @trans("Public_ViewEvent.thank_you_for_your_order") }}</h1>
         {{-- Ticket download --}}
         <div class="text-center py-4 lg:px-4 text-base">
-            <div class="py-2 px-4 bg-green-200 items-center text-green-800 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
-                <span class="font-semibold mr-2 text-left flex-auto">
+            <div class="py-2 px-4 bg-green-200 items-center text-green-800 leading-none rounded-full flex lg:inline-flex" role="alert">
+                <span class="font-semibold mr-2 text-center flex-auto">
                     {{ @trans("Public_ViewEvent.confirmation_email") }}
                 </span>
             </div>
         </div>
     </div>
     
-    <div class="flex items-start">
-        <div class="w-full md:w-7/12 bg-cover p-4">
+    <div class="flex items-start flex-col md:flex-row">
+        <div class="w-full md:w-7/12 bg-cover md:p-4">
 
             {{-- Event messages --}}
             @if($event->post_order_display_message)
@@ -22,13 +22,15 @@
                 </div>
             @endif
 
-            <div class="text-base p-4 bg-gray-100">
+            <div class="text-base p-4 -mt-6 -mx-6 md:mx-0 md:-mt-3 bg-gray-200 rounded-lg">
 
                 <h3 class="title mb-4 text-gray-800">
                     @lang("Public_ViewEvent.order_details")
                 </h3>
+                <b>@lang("Public_ViewEvent.email")</b><br>{{$order->email}}
                 
-                <div class="flex flex-row flex-wrap">
+                <div class="flex flex-row flex-wrap text-left">
+
                     <div class="md:w-1/3 w-1/2">
                         <b>@lang("Public_ViewEvent.first_name")</b><br> {{$order->first_name}}
                     </div>
@@ -48,13 +50,6 @@
                         <b>@lang("Public_ViewEvent.reference")</b><br> {{$order->order_reference}}
                     </div>
 
-                    <div class="md:w-1/3 w-1/2">
-                        <b>@lang("Public_ViewEvent.date")</b><br> {{$order->created_at->format(config('attendize.default_datetime_format'))}}
-                    </div>
-
-                    <div class="md:w-1/3 w-1/2">
-                        <b>@lang("Public_ViewEvent.email")</b><br> {{$order->email}}
-                    </div>
                     @if ($order->is_business)
                     <div class="md:w-1/3 w-1/2">
                         <b>@lang("Public_ViewEvent.business_name")</b><br> {{$order->business_name}}
@@ -84,7 +79,24 @@
                 </div>
             </div>
 
-            <table class="table-auto text-base w-full my-6 rounded-lg overflow-hidden">
+            <div class="flex flex-wrap">
+                @foreach($order->attendees as $attendee)
+                
+                <div class="w-full lg:w-1/2 lg:pr-6 py-4">
+                    <div class="rounded-lg shadow-lg p-6 text-base">
+                        <div class="text-gray-100 -mt-6 -mx-6 mb-4 px-4 py-2 rounded-t-lg bg-gray-600">{{{$attendee->ticket->title}}}</div>
+                        <p class="text-gray-600 mt-2">@lang("Public_ViewEvent.access_code"): <b>{{$attendee->private_reference_number}}</b></p>
+                        @if($attendee->is_cancelled)
+                            @lang("Public_ViewEvent.attendee_cancelled")
+                        @endif
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+
+
+            <table class="table-auto text-base w-full my-6 rounded-lg overflow-hidden hidden md:block">
                 <thead>
                     <tr class="text-left bg-gray-200">
                         <th class="py-2 px-4"> @lang("Public_ViewEvent.ticket") </th>
@@ -152,31 +164,8 @@
                     @endif
                 </tbody>
             </table>
-
-            <h3 class="title">
-                @lang("Public_ViewEvent.order_attendees")
-            </h3>
-
-            <div class="flex flex-wrap">
-                @foreach($order->attendees as $attendee)
-                
-                <div class="w-1/2 pr-6 py-4">
-                    <div class="rounded-lg shadow-lg p-6 text-base">
-                        <div class="bold text-lg font-bold text-gray-600">{{$attendee->first_name}} {{$attendee->last_name}}</div>
-                        <div>
-                            <a class="text-gray-500" href="mailto:{{$attendee->email}}">{{$attendee->email}}</a>
-                        </div>
-                        <p class="text-gray-600 mt-2">@lang("Public_ViewEvent.access_code"): {{$attendee->private_reference_number}}</p>
-                        <div class="text-gray-100 -mb-6 -mx-6 mt-4 px-4 py-2 rounded-b-lg bg-gray-600">{{{$attendee->ticket->title}}}</div>
-                        @if($attendee->is_cancelled)
-                            @lang("Public_ViewEvent.attendee_cancelled")
-                        @endif
-                    </div>
-                </div>
-                @endforeach
-            </div>
         </div>
-        <div class="w-full md:w-5/12 flex flex-col bg-white md:rounded-lg p-4 overflow-hidden">
+        <div class="w-full md:w-5/12 flex flex-col bg-white md:rounded-lg overflow-hidden">
              {{-- Event Data --}}
              <div class="flex flex-row items-start mb-6">
                 @include('Public.Staygig.ViewEvent.Partials.EventDateSection')

@@ -19,23 +19,28 @@
         <div class="w-full text-gray-800 leading-normal rounded-t">
 
             <!-- Event Tickets Card-->
-            <div class="flex rounded-lg shadow-lg flex flex-col md:flex-row items-center">
+            <div class="flex rounded-lg shadow-lg flex flex-col md:flex-row justify-between">
                 @include('Public.Staygig.ViewEvent.Partials.EventTicketsSection')
             </div>
             <!--/Event Tickets  Card-->
 
-            @include('Public.Staygig.ViewEvent.Partials.EventAccessSection')
+            <div class="mt-6 -mb-6 md:hidden">
+                @include('Public.Staygig.ViewEvent.Partials.EventAccessSection')
+            </div>
 
             <!--Posts Container-->
             <div class="flex flex-wrap justify-between pt-6 -mx-6">
 
                 <!--2/3 col -->
-                <div class="w-full md:w-2/3 p-6 flex flex-col flex-grow flex-shrink">
+                <div class="w-full md:w-2/3 px-6 mb-6 md:mb-0 flex flex-col flex-grow flex-shrink">
                     @include('Public.Staygig.ViewEvent.Partials.EventDescriptionSection')
                 </div>
 
                 <!--1/3 col -->
-                <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
+                <div class="w-full md:w-1/3 px-6 md:pr-6 md:pl-0 flex flex-col flex-grow flex-shrink">
+                    <div class="hidden md:block">
+                        @include('Public.Staygig.ViewEvent.Partials.EventAccessSection')
+                    </div>
                     @include('Public.Staygig.ViewEvent.Partials.EventOrganiserSection')
                 </div>
 

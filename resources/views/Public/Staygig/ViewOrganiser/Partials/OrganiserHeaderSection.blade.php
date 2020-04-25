@@ -1,12 +1,12 @@
 <!--Nav-->
 <nav id="header" class="w-full z-30 text-white relative" style="background-color: {{$organiser->page_header_bg_color}};">
 
-    <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 p-2">
+    <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2 px-4">
 
         <div class="flex items-center">
             <a class="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
                 href="#">
-                <img src="{{URL::to($organiser->full_logo_path)}}" class="h-8" />
+                <img src="{{URL::to($organiser->full_logo_path)}}" class="h-12" />
             </a>
         </div>
 
