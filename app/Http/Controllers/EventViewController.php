@@ -124,7 +124,10 @@ class EventViewController extends Controller
             'event' => $event,
             'attendee' => $attendee,
             'attendee_key' => $attendee_key,
-            'tickets' => false
+            'tickets' => $event->tickets()->orderBy('sort_order', 'asc')->get(),
+            'is_embedded' => 0,
+            'codeCheckInRoute' => route('postCheckInAttendeeCode', ['event_id' => $event->id]),
+            'resendRoute' => route('postResendTicketToAttendeePublic', ['event_id' => $event->id])
         ];
 
         if($attendee){
