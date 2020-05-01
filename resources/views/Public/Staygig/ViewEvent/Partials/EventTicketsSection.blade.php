@@ -18,10 +18,12 @@
                 <div class="w-full flex s font-bold text-2xl text-gray-900 mt-0 leading-tight">{{{$event->title}}}</div>
                 <p class="text-gray-800 text-lg mb-5">Por {{$event->organiser->name}}</p>
                 <div class="text-sm -mt-2 p-0">
-                    @if(!$tickets || $tickets->count() == 0)
-                    <div class="p-2 bg-yellow-600 items-center text-yellow-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
-                        <span class="font-semibold mx-2 text-left flex-auto">@lang("Public_ViewEvent.tickets_are_currently_unavailable")</span>
-                    </div>
+                    @if($tickets)
+                        @if($tickets->count() == 0)
+                        <div class="p-2 bg-yellow-600 items-center text-yellow-100 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
+                            <span class="font-semibold mx-2 text-left flex-auto">@lang("Public_ViewEvent.tickets_are_currently_unavailable")</span>
+                        </div>
+                        @endif
                     @else
                         @if($event->start_date->isFuture())
                         <div class="p-2 bg-green-600 items-center text-green-100 leading-none rounded-full flex lg:inline-flex" role="alert" data-start_date="{{$event->start_date->format("Y-m-d H:i:s")}}">
