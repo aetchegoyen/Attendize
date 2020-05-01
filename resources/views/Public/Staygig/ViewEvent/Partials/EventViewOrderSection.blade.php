@@ -183,7 +183,11 @@
                 {{ @trans("Public_ViewEvent.download_tickets") }}
             </a>
 
-            <a class="text-center btn-block bg-gray-600 text-white font-bold py-2 px-4 mt-6 rounded w-full" href="{{ route('showEventPage', ['event_id' => $event->id, 'event_slug' => Str::Slug($event->title)] ) }}">
+            <a class="text-center btn-block bg-gray-600 text-white font-bold py-2 px-4 mt-6 rounded w-full" href="{{ route('showLiveEventPage', [ 
+                'event_id' => $event_id, 
+                'reference' => base64_encode($order->attendees[0]->private_reference_number), 
+                'event_slug' => Str::slug($event->title) 
+                ]) }}">
                 {{ @trans("Public_ViewEvent.go_to_event") }}
             </a>
 

@@ -88,26 +88,26 @@ class EventViewController extends Controller
     {
         $event = Event::findOrFail($event_id);
         $code = base64_decode($reference);
-        $attendee = false;
-        if((bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $code)){
-            $attendee = Attendee::withoutCancelled()
-            ->join('tickets', 'tickets.id', '=', 'attendees.ticket_id')
-            ->where(function ($query) use ($event, $code) {
-                $query->where('attendees.event_id', $event->id)
-                    ->where('attendees.private_reference_number', $code);
-            })->select([
-                'attendees.id',
-                'attendees.order_id',
-                'attendees.first_name',
-                'attendees.last_name',
-                'attendees.email',
-                'attendees.reference_index',
-                'attendees.arrival_time',
-                'attendees.has_arrived',
-                'tickets.title as ticket',
-            ])->first();
-        }
-        
+        $code = preg_replace('/[^A-Za-z0-9\-]/', '', $code);
+        //var_dump($code); die;
+
+        $attendee = Attendee::withoutCancelled()
+        ->join('tickets', 'tickets.id', '=', 'attendees.ticket_id')
+        ->where(function ($query) use ($event, $code) {
+            $query->where('attendees.event_id', $event->id)
+                ->where('attendees.private_reference_number', $code);
+        })->select([
+            'attendees.id',
+            'attendees.order_id',
+            'attendees.first_name',
+            'attendees.last_name',
+            'attendees.email',
+            'attendees.reference_index',
+            'attendees.arrival_time',
+            'attendees.has_arrived',
+            'tickets.title as ticket',
+        ])->first();
+
 
         // var_dump($attendee); die;
         if (!Utils::userOwns($event) && !$event->is_live) {
@@ -129,10 +129,6 @@ class EventViewController extends Controller
             'codeCheckInRoute' => route('postCheckInAttendeeCode', ['event_id' => $event->id]),
             'resendRoute' => route('postResendTicketToAttendeePublic', ['event_id' => $event->id])
         ];
-
-        if($attendee){
-            return view(config('attendize.public_template_base').'ViewEvent.EventPage', $data);
-        }
 
         return view(config('attendize.public_template_base').'ViewEvent.EventLivePage', $data);
     }
