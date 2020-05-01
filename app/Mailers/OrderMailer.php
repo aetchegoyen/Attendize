@@ -41,6 +41,7 @@ class OrderMailer
         }
         try {
             Mail::send('Mailers.TicketMailer.SendOrderTickets', $data, function ($message) use ($order, $file_path) {
+                $message->from('hola@staygig.com', $order->event->organiser->name);
                 $message->to($order->email);
                 $message->subject(trans("Controllers.tickets_for_event", ["event" => $order->event->title]));
                 $message->attach($file_path);

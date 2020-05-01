@@ -36,6 +36,6 @@
 
 <!--Container-->
 @include('Public.Staygig.ViewOrganiser.Partials.OrganiserEventsSection')
-     @include('Public.Staygig.ViewOrganiser.Partials.OrganiserFooterSection')
+@include('Public.Staygig.ViewOrganiser.Partials.OrganiserFooterSection')
 @stop
 

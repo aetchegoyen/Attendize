@@ -10,9 +10,9 @@
             <div class="div h-48 overflow-hidden items-end flex flex-col bg-gray-200 relative">
 
                 @if($event->images->first()['image_path'])
-                <img src="{{config('attendize.cdn_url_user_assets').'/'.$event->images->first()['image_path']}}" class="rounded-t-md overflow-hidden object-cover h-full z-0">
+                <img src="{{config('attendize.cdn_url_user_assets').'/'.$event->images->first()['image_path']}}" class="rounded-t-md overflow-hidden object-cover h-full w-full z-0">
                 @else
-                <img src="https://source.unsplash.com/640x480/?music" class="rounded-t-md overflow-hidden object-cover h-full z-0">
+                <img src="https://source.unsplash.com/640x480/?music" class="rounded-t-md overflow-hidden object-cover h-full w-full z-0">
                 @endif
 
                 @if($event->start_date->isFuture())
