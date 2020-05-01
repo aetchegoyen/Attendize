@@ -1,14 +1,14 @@
-<div class="w-full md:w-7/12 flex flex-grow-0 flex-col">
-    <div class="flex">
+<div class="w-full lg:w-7/12 flex flex-grow-0 flex-col">
+    <div class="flex h-full items-center">
         @if($event->images->first()['image_path'])
-        <img src="{{config('attendize.cdn_url_user_assets').'/'.$event->images->first()['image_path']}}" class="w-full h-auto flex rounded-t md:rounded-l md:rounded-r-none">
+        <img src="{{config('attendize.cdn_url_user_assets').'/'.$event->images->first()['image_path']}}" class="w-full h-auto flex rounded-t md:rounded-l md:rounded-r-none object-contain shadow-lg">
         @else
         <img src="https://source.unsplash.com/1600x900/?music,live" class="w-full h-auto rounded-t flex">
         @endif
     </div>
 </div>
 
-<div class="w-full md:w-5/12 flex flex-col flex-grow flex-shrink shadow-lg bg-white md:rounded-r-lg">
+<div class="w-full lg:w-5/12 flex flex-col flex-grow flex-shrink shadow-lg bg-white md:rounded-r-lg">
 
     <div class="flex-1 bg-white rounded-t rounded-b-none shadow-lg p-4">
         <div class="flex flex-row items-start">
@@ -83,18 +83,20 @@
                                 {!! Form::hidden('tickets[]', $ticket->id) !!}
                                 <meta property="availability" content="http://schema.org/InStock">
                                 <div class="relative w-full">
-                                    <select name="ticket_{{$ticket->id}}" class="text-base form-control w-full">
+                                    {{-- <select name="ticket_{{$ticket->id}}" class="text-base form-control w-full">
                                     <div class="relative">                                    
-                                    @if($i > 0)
                                         <option value="0">0</option>
-                                    @endif
                                         @for($i=$ticket->min_per_person; $i<=$ticket->max_per_person; $i++)
                                             <option value="{{$i}}">{{$i}}</option>
                                         @endfor
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                                    </div>
+                                    </div> --}}
+                                    <input type="hidden" class="ticket_selection" name="ticket_{{$ticket->id}}" value="0">
+                                    {!!Form::submit(trans("Public_ViewEvent.register"), [
+                                        'class' => 'btn-block bg-green-700 text-white font-bold py-2 px-4 rounded w-full cursor-pointer ticket_purchase'
+                                    ])!!}
                                 </div>
                             @endif
                         @endif
@@ -135,13 +137,13 @@
 
     </div>
 
-    <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow-lg p-4 pt-0">
+    {{-- <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow-lg p-4 pt-0">
         <div class="flex items-center justify-between">
             {!!Form::submit(trans("Public_ViewEvent.register"), [
                 'class' => 'btn-block bg-green-700 text-white font-bold py-2 px-4 rounded w-full cursor-pointer'
             ])!!}
         </div>
-    </div>
+    </div> --}}
     {!! Form::hidden('is_embedded', $is_embedded) !!}
     {!! Form::close() !!}
 </div>

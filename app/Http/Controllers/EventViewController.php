@@ -7,6 +7,7 @@ use Mail;
 use Cookie;
 use Validator;
 use Carbon\Carbon;
+use App\Jobs\SendAttendeeTicket;
 use App\Models\Event;
 use App\Attendize\Utils;
 use App\Models\Attendee;
@@ -39,7 +40,8 @@ class EventViewController extends Controller
             'event' => $event,
             'tickets' => $event->tickets()->orderBy('sort_order', 'asc')->get(),
             'is_embedded' => 0,
-            'codeCheckInRoute' => route('postCheckInAttendeeCode', ['event_id' => $event->id])
+            'codeCheckInRoute' => route('postCheckInAttendeeCode', ['event_id' => $event->id]),
+            'resendRoute' => route('postResendTicketToAttendeePublic', ['event_id' => $event->id])
         ];
         /*
          * Don't record stats if we're previewing the event page from the backend or if we own the event.
@@ -86,7 +88,9 @@ class EventViewController extends Controller
     {
         $event = Event::findOrFail($event_id);
         $code = base64_decode($reference);
-        $attendee = Attendee::withoutCancelled()
+        $attendee = false;
+        if((bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $code)){
+            $attendee = Attendee::withoutCancelled()
             ->join('tickets', 'tickets.id', '=', 'attendees.ticket_id')
             ->where(function ($query) use ($event, $code) {
                 $query->where('attendees.event_id', $event->id)
@@ -102,6 +106,8 @@ class EventViewController extends Controller
                 'attendees.has_arrived',
                 'tickets.title as ticket',
             ])->first();
+        }
+        
 
         // var_dump($attendee); die;
         if (!Utils::userOwns($event) && !$event->is_live) {
@@ -119,6 +125,10 @@ class EventViewController extends Controller
             'attendee' => $attendee,
             'attendee_key' => $attendee_key
         ];
+
+        if($attendee){
+            return view(config('attendize.public_template_base').'ViewEvent.EventPage', $data);
+        }
 
         return view(config('attendize.public_template_base').'ViewEvent.EventLivePage', $data);
     }
@@ -300,6 +310,35 @@ class EventViewController extends Controller
                 'event_slug' => Str::slug($event->title) 
                 ]
             )
+        ]);
+    }
+
+    /**
+     * Send a message to an attendee
+     *
+     * @param Request $request
+     * @param $attendee_id
+     * @return mixed
+     */
+    public function postResendTicketToAttendee($event_id, Request $request)
+    {
+        $email = $request->get('email');
+        $attendee = Attendee::where(array(
+            "email" => $email,
+            "event_id" => $event_id
+        ))->first();
+
+        if($attendee){
+            $this->dispatch(new SendAttendeeTicket($attendee));
+            return response()->json([
+                'status'  => 'success',
+                'message' => trans("Controllers.ticket_successfully_resent"),
+            ]);
+        }
+
+        return response()->json([
+            'status'  => 'error',
+            'message' => trans("Controllers.ticket_successfully_resent"),
         ]);
     }
 }

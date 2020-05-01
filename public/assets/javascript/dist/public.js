@@ -2737,7 +2737,6 @@ function mirrorBuyer(e) {
         e.preventDefault();
         e.stopPropagation();
     }
-    console.log("hola");
     $('.ticket_holder_first_name').val($('#order_first_name').val());
     $('.ticket_holder_last_name').val($('#order_last_name').val());
     $('.ticket_holder_email').val($('#order_email').val());
@@ -2769,10 +2768,15 @@ function initCheckout() {
             $submit.attr("disabled", "disabled").addClass("opacity-50 cursor-not-allowed ");
         }
     });
+
+    $(".ticket_purchase").click(function (e) {
+        $(".ticket_selection").val(0);
+        $(this).parent().find("input[type=hidden]").val(1);
+    });
 }
 
 function initCheckin() {
-    var $_messages = $('.checkInMessages:visible');
+    var $_messages = $('#checkInMessages');
     if ($_messages) {
         var _msgText = $_messages.text();
         var _msgClass = $_messages.attr("class");
@@ -2780,8 +2784,8 @@ function initCheckin() {
 
     $('.apply_check_in_code').click(function(e) {
         var $button = $(this);
-        var $_accessCode = $('.access_code:visible');
-        var $_email = $('.access_email:visible');
+        var $_accessCode = $('.access_code');
+        var $_email = $('.access_email');
 
         var data = {
             'access_code': $_accessCode.val(),
@@ -2804,6 +2808,48 @@ function initCheckin() {
             }
             if (response.status === 'success') {
                 location.href = response.dest;
+                return;
+            }
+        });
+    });
+
+    $('#resend_tickets').click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $_messages = $('#checkInMessages');
+        if ($_messages) {
+            var _msgText = $_messages.text();
+            var _msgClass = $_messages.attr("class");
+        }
+        var $button = $(this);
+        var $_email = $('.access_email');
+
+        if (!$_email.val()) {
+            return;
+        }
+
+        var data = {
+            'email': $_email.val(),
+            '_token': _token
+        };
+
+        $_messages.text("Reenviando tu entrada.");
+        $button.attr("disabled", "disabled").addClass("opacity-25");
+
+        $.post(resendRoute, data, function (response) {
+            $button.removeAttr("disabled").removeClass("opacity-25");
+            if (response.status === 'error') {
+                $_messages.text(response.message.replace('"','')).attr("class", "text-red-700");
+                setTimeout(function () { 
+                    $_messages.text(_msgText).attr("class", _msgClass);
+                },5000)
+                return;
+            }
+            if (response.status === 'success') {
+                $_messages.text(response.message.replace('"','')).attr("class", "text-green-700");
+                setTimeout(function () { 
+                    $_messages.text(_msgText).attr("class", _msgClass);
+                },5000)
                 return;
             }
         });

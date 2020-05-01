@@ -66,13 +66,14 @@ button{
     left: 0;
     top: 0;
     width: 100%;
-    opacity: .2;
+    opacity: .5;
+    filter: blur(10px);
+    z-index: 0;
 }
 
 .bg-poster img{
     width: 100%;
     height: auto;
-    filter: blur(10px);
 }
 
 #vid1{
@@ -153,4 +154,9 @@ button{
 
 #livechat{
     @apply flex flex-col bg-gray-100 p-6 flex-grow;
+}
+
+.event-access{
+    @apply w-full p-4 shadow-lg rounded-lg bg-white mb-6;
+
 }

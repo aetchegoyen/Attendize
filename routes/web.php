@@ -160,9 +160,13 @@ Route::group(
             [EventViewController::class, 'showLiveEventHome']
         )->name('showLiveEventPage');
 
-        Route::post('{event_id}/code_check_in', 
+        Route::post('/{event_id}/code_check_in', 
             [EventViewController::class, 'postCheckInAttendeeCode']
         )->name('postCheckInAttendeeCode');
+
+        Route::post('/{event_id}/resend_tickets', 
+            [EventViewController::class, 'postResendTicketToAttendee']
+        )->name('postResendTicketToAttendeePublic');
 
         Route::post('/{event_id}/contact_organiser',
             [EventViewController::class, 'postContactOrganiser']

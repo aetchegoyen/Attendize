@@ -9,10 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-/*
-  Attendize.com   - Event Management & Ticketing
- */
-
 class EventAccessCodesController extends MyBaseController
 {
 

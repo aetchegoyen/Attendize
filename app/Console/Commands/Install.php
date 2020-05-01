@@ -25,7 +25,7 @@ class Install extends Command
      *
      * @var string
      */
-    protected $description = 'Install Attendize';
+    protected $description = 'Install';
 
     /**
      * Execute the console command.
@@ -45,7 +45,7 @@ class Install extends Command
         }
 
         $this->comment('--------------------');
-        $this->comment('Attempting to install Attendize v' . $version);
+        $this->comment('Attempting to install v' . $version);
         $this->comment('--------------------');
 
 
@@ -114,15 +114,8 @@ class Install extends Command
 
         file_put_contents(base_path('installed'), $version);
 
-        $this->comment("
-          _   _                 _ _         
-     /\  | | | |               | (_)        
-    /  \ | |_| |_ ___ _ __   __| |_ _______ 
-   / /\ \| __| __/ _ \ '_ \ / _` | |_  / _ \
-  / ____ \ |_| ||  __/ | | | (_| | |/ /  __/
- /_/    \_\__|\__\___|_| |_|\__,_|_/___\___|
-        ");
+        $this->comment("");
 
-        $this->comment('Success! You can now run Attendize');
+        $this->comment('Success! You can now run');
     }
 }
