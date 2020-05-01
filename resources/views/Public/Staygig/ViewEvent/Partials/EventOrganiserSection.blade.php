@@ -1,7 +1,7 @@
 <div class="flex-1 bg-white rounded-lg overflow-hidden shadow-lg">
     <a href="#" class="flex flex-wrap no-underline hover:no-underline">
-        <div class="p4"  style="background-color: {{$event->organiser->page_header_bg_color}};">
-            <img src="{{URL::to($event->organiser->full_logo_path)}}" class="h-full w-full rounded-t pb-6">
+        <div class="p-4 w-full" style="background-color: {{$event->organiser->page_header_bg_color}};">
+            <img src="{{URL::to($event->organiser->full_logo_path)}}" class="object-contain rounded-t pb-6">
         </div>
         <p class="w-full text-gray-600 text-xs md:text-sm px-6">Organizado por</p>
         <div class="w-full font-bold text-xl text-gray-900 px-6">{{$event->organiser->name}}</div>
