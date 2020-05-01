@@ -124,7 +124,7 @@ class EventViewController extends Controller
             'event' => $event,
             'attendee' => $attendee,
             'attendee_key' => $attendee_key,
-            'tickets' => []
+            'tickets' => false
         ];
 
         if($attendee){
