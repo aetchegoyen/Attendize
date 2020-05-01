@@ -123,7 +123,8 @@ class EventViewController extends Controller
         $data = [
             'event' => $event,
             'attendee' => $attendee,
-            'attendee_key' => $attendee_key
+            'attendee_key' => $attendee_key,
+            'tickets' => []
         ];
 
         if($attendee){
