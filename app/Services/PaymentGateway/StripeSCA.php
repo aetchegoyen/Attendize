@@ -30,7 +30,7 @@ class StripeSCA
         $this->transaction_data = [
             'amount' => $order_total,
             'currency' => $event->currency->code,
-            'description' => 'Order for customer: ' . $order_email,
+            'description' => 'Streamtickets: ticket para ' . $order_email,
             'paymentMethod' => $this->options['paymentMethod'],
             'receipt_email' => $order_email,
             'returnUrl' => $returnUrl,
